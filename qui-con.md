@@ -20,7 +20,7 @@ Sharing of opinions online can often easily be faked with bot accounts.
 - Trending topics can be artificially amplified by coordinated fake accounts, misleading genuine users into believing there is widespread agreement.
 - It is challenging to verify whether online opinions represent real human consensus or automated manipulation.
 
-Quiet Consensus addresses these issues through anonymous voting paired with cryptographic soulbound proof-of-humanity credentials, ensuring genuine, fearless representation of each individual's voice.
+Quiet Consensus addresses these issues through **anonymous voting paired with cryptographic soulbound proof-of-humanity credentials**, ensuring genuine, fearless representation of each individual's voice.
 
 ### Core Principles
 - **One vote, one person**
@@ -65,3 +65,8 @@ Any individual can create a poll, but only individuals with NTSCs can vote on po
 
 ## Example Use-case
 An example use-case of Quiet Consensus is the scientific community. It is common for scientists to keep opinions private due to public pressure. Quiet Consensus enables the scientific community to openly explore controversial or emerging topics without fear of professional repercussions or bias. This is possible because votes are anonymous, yet verifiable.
+
+
+
+
+
