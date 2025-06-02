@@ -1,5 +1,10 @@
 # Quiet Consensus
 
+## Other Pages
+- [README.md](./README.md)
+- [Quiet Consensus](./qui-con.md)
+- [Architecture](./architecture.md)
+
 ## Overview
 Quiet Consensus is an online opinion polling site which uses the secret network blockchain to hold the state of polls. Users can view the newest or trending polls on topics of interest while knowing that each vote belongs to a real human being from a particular group of people, and that no single human being could make more than one vote on each poll.
 
@@ -14,7 +19,7 @@ Social pressure influences people voicing their views.
 - Social media users quietly agree with a post, but won’t "like" or comment on it due to it being perceived as controversial and for fear of backlash.
 - Public polls show near-unanimity, but anonymous surveys later reveal widespread disagreement, demonstrating how social visibility alters expressed opinions.
 
-Sharing of opinions online can often easily be faked with bot accounts.
+Sharing of opinions online can often easily be artificially amplified or faked with bot accounts.
 
 - Online polling is often plagued with bots giving a false impression of consensus.
 - Trending topics can be artificially amplified by coordinated fake accounts, misleading genuine users into believing there is widespread agreement.

@@ -1,4 +1,10 @@
 # Quiet Consensus – System Architecture  
+
+## Other Pages
+- [README.md](./README.md)
+- [Quiet Consensus](./qui-con.md)
+- [Architecture](./architecture.md)
+
 ## 1 Purpose  
 Deliver a single-page website that lets any visitor **view**, **create**, and **vote** in blockchain-backed polls while keeping each ballot provably human and group-scoped. No central server, no database, only the page and the chain. 
 
