@@ -5,9 +5,12 @@
 - [Quiet Consensus](./docs/qui-con.md)
 - [Architecture](./docs/architecture.md)
 
+## To Do
+- Create the SCT NFT
+- Create the polling contract
+- Link-up front end to blockchain
 
-
-## In the future: 
+### Frontend-Blockchain Linking: 
 - Submit new poll to blockchain
    - Actually submits new poll
    - Could refresh polls until we see it (make UPDATE_REFRESH_FREQUENCY and UPDATE_REFRESH_TIMEOUT)
@@ -24,17 +27,18 @@
 ## Repository Structure
 ```
 quiet-consensus/
+├── Cargo.toml
 ├── README.md
-├── docs/       ← Documentation
+├── docs/       ←  Documentation
 │   ├── ...
 │   └── ...
-├── poll/       ← Polling smart contract
+├── poll/       ←  Polling smart contract
 │   ├── ...
 │   └── ...
-├── sct/        ← SCT (NFT) contract
+├── sct/        ←  SCT (NFT) contract
 │   ├── ...
 │   └── ...
-└── web/        ← React app front end
+└── web/        ←  React app front end
     ├── ...
     └── ...
 ```
@@ -62,12 +66,4 @@ https://github.com/scrtlabs/secret-toolkit
 https://github.com/scrtlabs/secret.js
 
 https://github.com/baedrik/snip721-reference-impl
-
-
-
-## To do
- - Plan project
- - Understand secret-auction (Tut May 14)
- - Understand secret-auction-monorepo (Tut May 21)
-
 
