@@ -81,7 +81,7 @@ const createInitialState = (): PollStore => {
   const examplePolls: Poll[] = [
     {
       pollId: "poll-1-biblical-fruit-crossing",
-      title: "Which Biblical Fruit Crossing Would You Choose?",
+      title: "Which Biblical Fruit Salad Would You Choose?",
       description: "If you had to cross biblical fruits to create the ultimate divine snack, which combination would be most blessed?",
       creator: "fruitful-disciple-42",
       createdAt: new Date('2025-01-15T10:00:00Z'),
