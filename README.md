@@ -2,11 +2,27 @@
 
 ## Other Pages
 - [README.md](./README.md)
-- [Quiet Consensus](./qui-con.md)
-- [Architecture](./architecture.md)
+- [Quiet Consensus](./docs/qui-con.md)
+- [Architecture](./docs/architecture.md)
 
 
-
+## Repository Structure
+```
+quiet-consensus/
+├── README.md
+├── docs/       ← Documentation
+│   ├── ...
+│   └── ...
+├── poll/       ← Polling smart contract
+│   ├── ...
+│   └── ...
+├── sct/        ← SCT (NFT) contract
+│   ├── ...
+│   └── ...
+└── web/        ← React app front end
+    ├── ...
+    └── ...
+```
 
 ## Assignment
 

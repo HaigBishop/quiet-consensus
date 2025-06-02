@@ -1,0 +1,232 @@
+/*
+Styles for the QuiConUI component.
+Implements the split-panel layout with neon pink accent color.
+*/
+
+/* Color variables */
+:root {
+  --neon-pink: #ff006e;
+  --light-pink: #ff4d94;
+  --dark-pink: #cc0056;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #d4d6d8;
+  --panel-bg: #ffffff;
+  --hover-bg: #f1f3f5;
+  --light-grey: #c2c2c2;
+}
+
+/* Container and layout */
+.quicon-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode styles */
+.quicon-container.dark-mode {
+  --bg-primary: #000000;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #adb5bd;
+  --border-color: #333333;
+  --panel-bg: #0d0d0d;
+  --hover-bg: #1a1a1a;
+}
+
+/* Top bar */
+.top-bar {
+  height: 60px;
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  flex-shrink: 0;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.0rem;
+}
+
+.logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+.app-title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--neon-pink);
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Polls panel */
+.polls-panel {
+  flex: 0 0 75%;
+  background-color: var(--panel-bg);
+  border-right: 2px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Options panel */
+.options-panel {
+  flex: 0 0 25%;
+  background-color: var(--panel-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Panel headers */
+.panel-header {
+  height: 56px;
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Icon buttons */
+.icon-button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.icon-button:hover {
+  background-color: var(--hover-bg);
+  color: var(--neon-pink);
+  transform: scale(1.05);
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+}
+
+/* Panel content */
+.polls-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.options-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Options styling */
+.option-item {
+  margin-bottom: 1rem;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.option-label:hover {
+  background-color: var(--hover-bg);
+}
+
+.option-label span {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--light-grey);
+  border-radius: 24px;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-switch:checked {
+  background-color: var(--neon-pink);
+}
+
+.toggle-switch::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch:checked::before {
+  transform: translateX(24px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .polls-panel {
+    flex: 1 1 auto;
+    border-right: none;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .options-panel {
+    flex: 0 0 auto;
+    min-height: 200px;
+  }
+} 

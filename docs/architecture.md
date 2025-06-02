@@ -1,7 +1,7 @@
 # Quiet Consensus – System Architecture  
 
 ## Other Pages
-- [README.md](./README.md)
+- [README.md](../README.md)
 - [Quiet Consensus](./qui-con.md)
 - [Architecture](./architecture.md)
 
@@ -44,13 +44,13 @@ Each wrapper adds helpful browser console logging so debugging stays painless.
 
 Holds every poll, its options, tallies, and a record of who voted (only hashes are stored so actual voter addresses remain hidden by Secret Network’s encryption feature).
 
-### 3.2 NTSC (Now-transferable Soulbound Credential) Contract
+### 3.2 SCT (Soulbound Credential Token) Contract
 
 Mint-once, non-tradeable token proving “one human of group X”. Required to call `cast_vote` in the polling contract. 
 
-### 3.3 NTSC Admin Account
+### 3.3 SCT Admin Account
 
-The key controlled by an off-chain “issuing organisation” that mints NTSCs after manual identity checks. It never leaves cold storage except when signing mint transactions.
+The key controlled by an off-chain “issuing organisation” that mints SCTs after manual identity checks. It never leaves cold storage except when signing mint transactions.
 
 ------
 
@@ -80,7 +80,7 @@ All the stuff you store about a poll itself.
 * `allowMultiple` (Boolean)
   – can someone vote for more than one option?
 * `eligibleGroups` (List of Strings)
-  – e.g. \[“biology-club”, “staff”] — only holders of those NTSCs may vote.
+  – e.g. \[“biology-club”, “staff”] — only holders of those SCTs may vote.
 * `metadata` (Map\<String, String>)
   – any extra JSON-stringified fields you dream up (e.g. `{"theme":"dark"}`).
 
@@ -105,7 +105,7 @@ Keeps track of who voted what (encrypted on-chain).
 * `castAt` (Timestamp)
 
 
-### 4.4 SoulboundCredential (NTSC)
+### 4.4 SoulboundCredential (SCT)
 
 * `tokenId` (String)
   – unique ID (e.g. SHA-256 of wallet+group+timestamp).
@@ -132,7 +132,7 @@ Keeps track of who voted what (encrypted on-chain).
    - User fills form → `createPoll()` signs and broadcasts a `create_poll` message.
    - Chain emits event → front-end listens via WebSocket and refreshes list.
 3. **Voting**:
-   - Button click → `castVote()`; chain rejects the tx if the wallet lacks an NTSC.
+   - Button click → `castVote()`; chain rejects the tx if the wallet lacks an SCT.
    - Upon success, the UI instantly increments the displayed tally via optimistic update, then confirms when event arrives.
 4. **Realtime updates** (nice-to-have):
    - A lightweight WebSocket subscribes to `new_poll` and `vote_cast` events so all open pages stay in sync.
@@ -145,7 +145,7 @@ Keeps track of who voted what (encrypted on-chain).
 2. Issuer searches internal spreadsheet to ensure “not issued yet”.
 3. Issuer opens a small React admin page, pastes user wallet address, hits **Mint**.
 4. Admin page signs a mint transaction with the cold key (hardware wallet connected once).
-5. After Tx confirmation, NTSC appears in the user’s Keplr wallet; issuer deletes the address from local machine.
+5. After Tx confirmation, SCT appears in the user’s Keplr wallet; issuer deletes the address from local machine.
 6. Person can now vote exactly once per poll.
 
 > **Toy-project simplification**: skip fancy hardware connections – a plain text mnemonic is fine while prototyping on the test net.
@@ -155,7 +155,7 @@ Keeps track of who voted what (encrypted on-chain).
 ## 7 Security & Privacy Notes
 
 - All votes encrypted by chain’s built-in “secret contracts” (code executes inside a trusted execution environment; node operators cannot read plaintext).
-- **Rate-limiting**: the NTSC check already enforces one-person one-vote.
+- **Rate-limiting**: the SCT check already enforces one-person one-vote.
 - **Front-end integrity**: publish a hash (SHA-256) of `app.js` in the README so users can verify they are loading the approved build.
 
 ------

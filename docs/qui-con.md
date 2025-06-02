@@ -1,7 +1,7 @@
 # Quiet Consensus
 
 ## Other Pages
-- [README.md](./README.md)
+- [README.md](../README.md)
 - [Quiet Consensus](./qui-con.md)
 - [Architecture](./architecture.md)
 
@@ -38,34 +38,34 @@ Quiet Consensus addresses these issues through **anonymous voting paired with cr
    Open-source, auditable code ensures you can verify the process without sacrificing privacy.
 
 
-## Non-Transferable Soulbound Credentials
-NTSCs (non-transferable soulbound credentials) are NFTs that represent badges of membership to a real world group of people. At their core they represent:
+## Soulbound Credential Tokens
+SCTs (soulbound credential tokens) are NFTs that represent badges of membership to a real world group of people. At their core they represent:
  - Proof-of-humanity (you know it’s a real person)
  - Group membership (you belong to “that” community)
  - Immutable one-per-person (you can’t duplicate or trade it)
 
-If an account has an NTSC that means the account belongs to an individual in the group of humans that the NTSC represents. NTSCs are issued by an off-chain organisation called an "issuing organisation".
+If an account has an SCT that means the account belongs to an individual in the group of humans that the SCT represents. SCTs are issued by an off-chain organisation called an "issuing organisation".
 
-The off-chain issuing organisation has access to the on-chain NTSC admin account which gives them exclusive rights to issue NTSCs. This issuing process looks like:
+The off-chain issuing organisation has access to the on-chain SCT admin account which gives them exclusive rights to issue SCTs. This issuing process looks like:
 1) The individual meets with the issuing organisation and confirms their human identity and that they belong to a particular group.
-2) The issuing organisation confirms that an NTSC has not already been issued to this individual yet by checking their private off-chain records.
-3) The individual provides their on-chain account address, and the issuing organisation mints an NTSC to that account. 
-4) The issuing organisation erases the address provided, but records the fact that this individual has been issued an NTSC.
+2) The issuing organisation confirms that an SCT has not already been issued to this individual yet by checking their private off-chain records.
+3) The individual provides their on-chain account address, and the issuing organisation mints an SCT to that account. 
+4) The issuing organisation erases the address provided, but records the fact that this individual has been issued an SCT.
 
-Once an NTSC is minted, it cannot be transferred, burned or mutated.
+Once an SCT is minted, it cannot be transferred, burned or mutated.
 
 Therefore, if we trust:
- - The issuing organisation's ability to correctly issue NTSCs
+ - The issuing organisation's ability to correctly issue SCTs
  - That the individual's address was entered without a mistake
  - The individual doesn't lose or give away access to their account
 
-Then we can guarantee that if an account has an NTSC, that account is controlled by an individual belonging to the group of humans that the NTSC represents.
+Then we can guarantee that if an account has an SCT, that account is controlled by an individual belonging to the group of humans that the SCT represents.
 
-We can also guarantee that each individual belonging to the group of humans that the NTSC represents has access to a maximum of 1 account that possesses an NTSC.
+We can also guarantee that each individual belonging to the group of humans that the SCT represents has access to a maximum of 1 account that possesses an SCT.
 
 
 ## Anonymous Consensus Polling
-Any individual can create a poll, but only individuals with NTSCs can vote on polls. The act of voting is anonymous (thanks to the secret network), but since it requires an NTSC we can be sure that each vote represents the opinion of a single individual verified to belong to the group that the NTSC represents.
+Any individual can create a poll, but only individuals with SCTs can vote on polls. The act of voting is anonymous (thanks to the secret network), but since it requires an SCT we can be sure that each vote represents the opinion of a single individual verified to belong to the group that the SCT represents.
 
 
 ## Example Use-case
