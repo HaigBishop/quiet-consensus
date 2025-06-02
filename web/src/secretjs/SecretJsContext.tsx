@@ -18,7 +18,7 @@ import type {
 } from "react";
 import { SecretNetworkClient } from "secretjs";
 
-// can make these .env vars instead
+// Which blockchain to use (probably testnet)
 const SECRET_CHAIN_ID = "pulsar-3";
 const SECRET_LCD = "https://pulsar.lcd.secretnodes.com";
 

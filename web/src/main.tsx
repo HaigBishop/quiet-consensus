@@ -8,11 +8,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { SecretJsContextProvider } from './secretjs/SecretJsContext.tsx'
+import { PollStoreProvider } from './context/PollStoreContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <SecretJsContextProvider>
-      <App />
+      <PollStoreProvider>
+        <App />
+      </PollStoreProvider>
     </SecretJsContextProvider>
   </StrictMode>,
 )

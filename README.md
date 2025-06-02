@@ -6,6 +6,21 @@
 - [Architecture](./docs/architecture.md)
 
 
+
+## In the future: 
+- Submit new poll to blockchain
+   - Actually submits new poll
+   - Could refresh polls until we see it (make UPDATE_REFRESH_FREQUENCY and UPDATE_REFRESH_TIMEOUT)
+- Submit vote to blockchain
+   - Actually submits vote
+   - Could refresh polls until we see it (make UPDATE_REFRESH_FREQUENCY and UPDATE_REFRESH_TIMEOUT)
+- Fetch states of polls from blockchain 
+   - Actually fetches polls -> PollStore
+   - Remove example initialisation of polls (or comment out?)
+   - Fetch at start-up then regularly (make REFRESH_POLLS_EVERY)
+
+
+
 ## Repository Structure
 ```
 quiet-consensus/
@@ -50,14 +65,9 @@ https://github.com/baedrik/snip721-reference-impl
 
 
 
-
-
 ## To do
  - Plan project
  - Understand secret-auction (Tut May 14)
  - Understand secret-auction-monorepo (Tut May 21)
-
-
-
 
 

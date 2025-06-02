@@ -77,10 +77,6 @@ All the stuff you store about a poll itself.
   – see 4.2 below.
 * `tally` (List of Integers)
   – count per option index.
-* `allowMultiple` (Boolean)
-  – can someone vote for more than one option?
-* `eligibleGroups` (List of Strings)
-  – e.g. \[“biology-club”, “staff”] — only holders of those SCTs may vote.
 * `metadata` (Map\<String, String>)
   – any extra JSON-stringified fields you dream up (e.g. `{"theme":"dark"}`).
 

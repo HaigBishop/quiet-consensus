@@ -1,0 +1,237 @@
+/*
+Styles for the AddPollDialog component.
+Extends the base dialog styles with form-specific styling.
+*/
+
+/* Inherit base dialog styles from ViewPollDialog */
+/* The dialog overlay, poll-dialog, dialog-header, and dialog-content classes are shared */
+
+/* Add Poll specific adjustments */
+.add-poll-dialog {
+  max-width: 650px;
+}
+
+/* Form styling */
+.add-poll-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.form-textarea {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  transition: all 0.2s ease;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+}
+
+.form-textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Options container */
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.option-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.option-input {
+  flex: 1;
+}
+
+.remove-option-button {
+  width: 55px;
+  height: 55px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.remove-option-button:hover {
+  background-color: var(--hover-bg);
+  color: var(--neon-pink);
+}
+
+.add-option-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px dashed var(--border-color);
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-option-button:hover {
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+  background-color: rgba(255, 0, 110, 0.05);
+}
+
+/* Form actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.make-poll-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background-color: var(--neon-pink);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.make-poll-button:hover:not(:disabled) {
+  background-color: var(--dark-pink);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
+}
+
+.make-poll-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.make-poll-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.make-poll-button.submitting {
+  background-color: var(--text-secondary);
+}
+
+.loading-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode adjustments */
+.quicon-container.dark-mode .form-input,
+.quicon-container.dark-mode .form-textarea {
+  background-color: var(--bg-primary);
+  border-color: #333333;
+}
+
+.quicon-container.dark-mode .form-input:focus,
+.quicon-container.dark-mode .form-textarea:focus {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.15);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .add-poll-dialog {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .form-actions {
+    padding-top: 0.75rem;
+  }
+  
+  .make-poll-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    min-width: 120px;
+  }
+  
+  .option-input-group {
+    gap: 0.375rem;
+  }
+  
+  .remove-option-button {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .add-option-button {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9rem;
+  }
+} 
