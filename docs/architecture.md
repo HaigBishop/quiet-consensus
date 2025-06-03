@@ -101,22 +101,6 @@ Keeps track of who voted what (encrypted on-chain).
 * `castAt` (Timestamp)
 
 
-### 4.4 SoulboundCredential (SCT)
-
-* `tokenId` (String)
-  – unique ID (e.g. SHA-256 of wallet+group+timestamp).
-* `ownerAddress` (String)
-  – wallet address that owns this credential.
-* `groupIds` (List of Strings)
-  – the groups this credential proves membership in (e.g. "biology-club").
-* `issuerId` (String)
-  – ID of the off-chain organisation that minted this.
-* `issuedAt` (Timestamp)
-  – when the credential was issued.
-
-(this is a high-level conceptual structure, not neccesarily true to the NFT's structue. To be used to guide contract design.)
-
-
 ------
 
 ## 5 Client-side Data Flow

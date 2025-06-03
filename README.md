@@ -6,7 +6,7 @@
 - [Architecture](./docs/architecture.md)
 
 ## To Do
-- Mint some SCT NFTs
+- Create SCT viewing keys
 - Create the polling contract
 - Link-up front end to blockchain
 

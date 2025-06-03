@@ -192,3 +192,8 @@ This will output something like below.
 ```bash
 {"contract_infos":[{"contract_address":"secret1l45xfk5mw7cyfnyrferj0ezcxd8krrlpcfnyee","contract_info":{"code_id":"14505","creator":"secret1ve9p7363enrj9v5f3fq428tqxvzl836wgrgk3w","label":"SoulboundCredentialToken","created":null,"ibc_port_id":"","admin":"","admin_proof":null}}}
 ```
+
+
+## 6. Create an admin viewing key for the contract
+
+???
