@@ -1,0 +1,8 @@
+
+# This is the details for the Keplr wallet "Quiet Consensus Admin" which is the admin for the SCT NFT
+
+>ADDRESS
+secret1ve9p7363enrj9v5f3fq428tqxvzl836wgrgk3w
+
+>KEY_PHRASE
+stuff result visual zero coconut auction relax acquire divide soon link duck

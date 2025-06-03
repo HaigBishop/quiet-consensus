@@ -6,7 +6,7 @@
 - [Architecture](./docs/architecture.md)
 
 ## To Do
-- Create the SCT NFT
+- Mint some SCT NFTs
 - Create the polling contract
 - Link-up front end to blockchain
 
@@ -65,5 +65,18 @@ https://github.com/scrtlabs/secret-toolkit
 
 https://github.com/scrtlabs/secret.js
 
+
+## SNIP-721
+
+https://github.com/SecretFoundation/SNIPs/blob/master/SNIP-721.md
+
 https://github.com/baedrik/snip721-reference-impl
+
+
+## SNIP-722
+
+https://github.com/SecretFoundation/SNIPs/blob/master/SNIP-721.md
+
+https://github.com/baedrik/snip-722-spec/blob/master/SNIP-722.md
+
 

@@ -1,0 +1,14 @@
+
+# This is the details for the SCT NFT contract created by following creating_the_sct_contract.md
+
+>TX_HASH
+8ACD08F99BB1E78BC43EB8F507393331F9C58B63B9E700A8E7FE7E377AFB401E
+
+>CODE_ID
+14505
+
+>PRNG
+KQvPIFcn1ST48ffhL41ia/IAxa0p7WRus7Msut4VJto=
+
+>SCT_CONTRACT_ADDRESS
+secret1l45xfk5mw7cyfnyrferj0ezcxd8krrlpcfnyee
