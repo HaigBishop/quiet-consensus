@@ -1,0 +1,25 @@
+{
+  "name": "uploader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean:dist": "rimraf ./dist",
+    "build": "npm run clean:dist && tsc",
+    "upload": "npm run build && node dist/src/upload",
+    "instantiate": "npm run build && node dist/src/instantiate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "secretjs": "^1.15.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "rimraf": "^6.0.1"
+  }
+}
