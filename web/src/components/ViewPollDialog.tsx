@@ -68,7 +68,7 @@ const ViewPollDialog = ({ poll, isOpen, onClose }: ViewPollDialogProps) => {
         <div className="dialog-content">
           <p className="poll-description-dialog">{poll.description}</p>
           
-          <div className="poll-metadata">
+          <div className="poll-info">
             <span>Total votes: {totalVotes}</span>
             <span>Created: {poll.createdAt.toLocaleDateString()}</span>
           </div>

@@ -3,3 +3,5 @@ snip721_reference*
 temp_build
 node_modules
 sct-old
+Cargo.lock
+tutorial.md

@@ -112,7 +112,7 @@ Implements modal overlay, dialog layout, voting interface, and results visualiza
   line-height: 1.5;
 }
 
-.poll-metadata {
+.poll-info {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -121,7 +121,7 @@ Implements modal overlay, dialog layout, voting interface, and results visualiza
   color: var(--text-secondary);
 }
 
-.poll-metadata span {
+.poll-info span {
   padding: 0.4rem 0.8rem;
   background-color: var(--hover-bg);
   border-radius: 6px;
@@ -345,7 +345,7 @@ Implements modal overlay, dialog layout, voting interface, and results visualiza
     font-size: 1.2rem;
   }
   
-  .poll-metadata {
+  .poll-info {
     flex-direction: column;
     gap: 0.5rem;
   }

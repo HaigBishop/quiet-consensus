@@ -22,8 +22,6 @@ export interface Poll {
   options: PollOption[];
   /** Vote count per option index */
   tally: number[];
-  /** Additional metadata as key-value pairs */
-  metadata: Record<string, string>;
 }
 
 export interface PollStore {

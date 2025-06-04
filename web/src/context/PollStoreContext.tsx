@@ -89,8 +89,7 @@ const createInitialState = (): PollStore => {
         { optionId: "opt-2", text: "Grapes of Canaan × Figs of Bethany" },
         { optionId: "opt-3", text: "Olives of Gethsemane × Dates of Jericho" }
       ],
-      tally: [15, 23, 8],
-      metadata: { theme: "biblical-agriculture", humor: "divine" }
+      tally: [15, 23, 8]
     },
     {
       pollId: "poll-2-crossing-red-sea-snacks",
@@ -103,8 +102,7 @@ const createInitialState = (): PollStore => {
         { optionId: "opt-3", text: "Burning Bush Berries (self-heating!)" },
         { optionId: "opt-4", text: "Parted Peaches (split perfectly every time)" }
       ],
-      tally: [12, 25, 7, 25],
-      metadata: { theme: "biblical-journey", difficulty: "wilderness" }
+      tally: [12, 25, 7, 25]
     },
     {
       pollId: "poll-3-noah-fruit-ark",
@@ -116,8 +114,7 @@ const createInitialState = (): PollStore => {
         { optionId: "opt-2", text: "Two-by-Two Tangerines × Flood-resistant Bananas" },
         { optionId: "opt-3", text: "Ark-sized Avocados × Covenant Cherries" }
       ],
-      tally: [31, 18, 22],
-      metadata: { theme: "preservation", vessel: "ark", species: "hybrid-fruits" }
+      tally: [31, 18, 22]
     }
   ];
 

@@ -97,8 +97,7 @@ const AddPollDialog = ({ isOpen, onClose }: AddPollDialogProps) => {
         description: description.trim(),
         createdAt: new Date(),
         options: pollOptions,
-        tally: new Array(pollOptions.length).fill(0),
-        metadata: {}
+        tally: new Array(pollOptions.length).fill(0)
       };
 
       // TODO: In the future, submit poll to blockchain instead of just adding to store
