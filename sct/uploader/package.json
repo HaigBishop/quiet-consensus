@@ -1,0 +1,26 @@
+{
+  "name": "sct-uploader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean:dist": "rimraf ./dist",
+    "build": "npm run clean:dist && tsc",
+    "upload": "npm run build && node dist/upload",
+    "instantiate": "npm run build && node dist/instantiate",
+    "mint": "npm run build && node dist/mint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "SCT contract uploader and manager for Quiet Consensus",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "secretjs": "^1.15.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "rimraf": "^6.0.1"
+  }
+} 

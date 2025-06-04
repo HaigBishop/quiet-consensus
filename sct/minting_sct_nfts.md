@@ -1,143 +1,99 @@
 # Minting Soulbound Credential Tokens
 
-This document describes minting three non-transferable SCT NFTs. Before proceeding, ensure you have completed the steps in `creating_the_sct_contract.md`.
+This document describes minting three non-transferable SCT NFTs using TypeScript and secretjs. Before proceeding, ensure you have completed the steps in [creating_the_sct_contract.md](./creating_the_sct_contract.md).
 
-If you have followed `creating_the_sct_contract.md`, then the contract info will be saved into `sct-contract.txt` (including `CODE_ID` and `SCT_CONTRACT_ADDRESS`). And the admin account (“Quiet Consensus Admin”) will be added to secretcli under the key name `quiconadmin`.
+
+## Prerequisites
+
+Ensure your `.env` file contains:
+- `ADMIN_MNEMONIC` - The admin wallet mnemonic
+- `SCT_CONTRACT_ADDRESS` - The deployed SCT contract address
+- `SCT_CODE_HASH` - The SCT contract code hash
+- User addresses (`USER1_ADDRESS`, `USER2_ADDRESS`, `USER3_ADDRESS`)
+- User mnemonics (`USER1_MNEMONIC`, `USER2_MNEMONIC`, `USER3_MNEMONIC`)
 
 
 ## 1. Create the user accounts in Keplr
 
-1. In Keplr click “Create new wallet”.
-2. Copy each wallet’s mnemonic into `user-wallets.txt`.
-3. Name it like “Quiet Consensus User 1”.
-4. Add the secret test network
-5. Update secret testnet end points if required
+1. In Keplr click "Create new wallet"
+2. Name it like "Quiet Consensus User 1"
+3. Add the secret test network
+4. Update secret testnet end points if required:
     - RPC: https://pulsar.rpc.secretnodes.com
     - LCD: https://pulsar.lcd.secretnodes.com
-6. Copy each wallet’s secret net address (starting `secret1…`) into `user-wallets.txt`.
-7. Repeat for “Quiet Consensus User 2” and “Quiet Consensus User 3”.
-8. At the end of this step, you should have three new Keplr wallets with their info stored in `user-wallets.txt` like:
+5. Copy the wallet's mnemonic and address
+6. Repeat for "Quiet Consensus User 2" and "Quiet Consensus User 3"
+7. Update your `.env` file with the user details:
     ```
-    # -------------------------------------------------------
-    ### Quiet Consensus User 1
-    >KEY_PHRASE
-    various double all gospel note trade major crane must mansion render they
-    >ADDRESS
-    secret1evmzszph47j8kymhkd8c76h2h5jhxgsd7wpauc
+    USER1_MNEMONIC="various double all gospel note trade major crane must mansion render they"
+    USER1_ADDRESS="secret1evmzszph47j8kymhkd8c76h2h5jhxgsd7wpauc"
     
-    # -------------------------------------------------------
-    ### Quiet Consensus User 2
-    >KEY_PHRASE
-    bone meadow salute patient trust globe crush poet shell shoe join item
-    >ADDRESS
-    secret12u0xz7dtxp53s60jetnnd6wlfl468m34avjlpp
+    USER2_MNEMONIC="bone meadow salute patient trust globe crush poet shell shoe join item"
+    USER2_ADDRESS="secret12u0xz7dtxp53s60jetnnd6wlfl468m34avjlpp"
     
-    # -------------------------------------------------------
-    ### Quiet Consensus User 3
-    >KEY_PHRASE
-    peace bomb camera exhaust asthma own employ dream under noise electric adjust
-    >ADDRESS
-    secret14evc5pmhz9sm5z55cztl6r5h6lmx7qwuuz0gwy
+    USER3_MNEMONIC="peace bomb camera exhaust asthma own employ dream under noise electric adjust"
+    USER3_ADDRESS="secret14evc5pmhz9sm5z55cztl6r5h6lmx7qwuuz0gwy"
     ```
 
 
 ## 2. Fund each user account via the faucet
 
-For each new address, open the Pulsar 3 faucet at
+For each new address, open the Pulsar 3 faucet:
 
 ```
 https://pulsar-3-faucet.vercel.app/
 ```
 
-and paste in the new wallet address. You can use incognito mode to use multiple times. Confirm each account has balance in Keplr.
+Paste in each wallet address and request tokens. You can use incognito mode to use the faucet multiple times. Confirm each account has balance in Keplr.
 
 
+## 3. Mint non-transferable SCT NFTs
 
-## 4. Mint a non-transferable SCT NFT to each user
+1. Make sure you're in `sct/uploader/`
+2. Ensure your `.env` file has all required values
+3. Run `npm run mint`
 
-Recall from `sct-contract.txt` that:
+    This will:
 
-* `CODE_ID=14505`
-* `SCT_CONTRACT_ADDRESS=secret1l45xfk5mw7cyfnyrferj0ezcxd8krrlpcfnyee`
+    - Mint a non-transferable SCT NFT to each user from the admin account
+    - Create viewing keys for each user account
+    - Verify NFT ownership using the viewing keys
+4. Watch the output for confirmation, for example:
+    ```
+    Checking NFT ownership for Quiet Consensus User 1...
+    ✓ NFT ownership query successful for Quiet Consensus User 1
+    Quiet Consensus User 1 owns 2 SCT NFT(s)
+    Token IDs: sct-1748998365932, sct-1749002721751
+    Ownership info saved to logs/ownership_tx_user_1.json
+    
+    Checking NFT ownership for Quiet Consensus User 2...
+    ✓ NFT ownership query successful for Quiet Consensus User 2
+    Quiet Consensus User 2 owns 2 SCT NFT(s)
+    Token IDs: sct-1748998371232, sct-1749002727126
+    Ownership info saved to logs/ownership_tx_user_2.json
+    
+    Checking NFT ownership for Quiet Consensus User 3...
+    ✓ NFT ownership query successful for Quiet Consensus User 3
+    Quiet Consensus User 3 owns 2 SCT NFT(s)
+    Token IDs: sct-1748998375925, sct-1749002738384
+    Ownership info saved to logs/ownership_tx_user_3.json
+    
+    SCT minting and verification process completed!
+    
+    === Viewing Keys ===
+    User 1 viewing key: 44mgktlew3gy8k5m8nsso
+    User 2 viewing key: xml59b14s3rgpobnunf5mi
+    User 3 viewing key: 408ec147ki9r31rl8iwjpk
+    
+    All transaction logs and ownership info saved to logs/ directory
+    ```
 
-We’ll mint three SCTs, setting `"transferable": false`.
+5. You may want to say the viewing keys in `.env`, like this:
 
-1. Export the contract address to an environment variable:
-
-   ```bash
-   export SCT_CONTRACT=secret1l45xfk5mw7cyfnyrferj0ezcxd8krrlpcfnyee
+   ```
+   USER1_VIEWING_KEY="0afcxj7wv1pluaiuaqx0o2"
+   USER2_VIEWING_KEY="np3931t9nmlbc0quow8cef"
+   USER3_VIEWING_KEY="u78lhftdhmqrpxjhb5txq"
    ```
 
-2. Mint to Quiet Consensus User 1:
-
-   ```bash
-   secretcli tx compute execute "$SCT_CONTRACT" \
-     '{
-       "mint_nft": {
-         "owner": "secret1evmzszph47j8kymhkd8c76h2h5jhxgsd7wpauc",
-         "transferable": false
-       }
-     }' \
-     --from quiconadmin \
-     --gas 200000
-   ```
    
-   * `"owner"` is the user’s address exactly as known by secretcli.
-   * We set `"transferable": false` to make it non-transferable.
-   
-3. Mint to Quiet Consensus User 2:
-
-   ```bash
-   secretcli tx compute execute "$SCT_CONTRACT" \
-     '{
-       "mint_nft": {
-         "owner": "secret12u0xz7dtxp53s60jetnnd6wlfl468m34avjlpp",
-         "transferable": false
-       }
-     }' \
-     --from quiconadmin \
-     --gas 200000
-   ```
-   
-4. Mint to Quiet Consensus User 3:
-
-   ```bash
-   secretcli tx compute execute "$SCT_CONTRACT" \
-     '{
-       "mint_nft": {
-         "owner": "secret14evc5pmhz9sm5z55cztl6r5h6lmx7qwuuz0gwy",
-         "transferable": false
-       }
-     }' \
-     --from quiconadmin \
-     --gas 200000
-   ```
-
-
-
-## 5. Check ownership of SCTs
-
-Here we will check that the SCTs were successfully minted by using secretcli to create viewing keys. For real users, viewing keys will only be made by them in the frontend, but this is just testing.
-
-1. Add user accounts to secretcli
-
-   ```bash
-   # For Quiet Consensus User 1
-   secretcli keys add quiconuser1 --recover
-   # (paste the mnemonic here)
-   
-   # For Quiet Consensus User 2
-   secretcli keys add quiconuser2 --recover
-   # (paste the mnemonic here)
-   
-   # For Quiet Consensus User 3
-   secretcli keys add quiconuser3 --recover
-   # (paste the mnemonic here)
-   ```
-
-
-2. For each user, create a viewing key
-    ???
-   
-3. Query token ownership
-    ???

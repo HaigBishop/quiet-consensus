@@ -7,8 +7,6 @@
 
 ## To Do
 - Create the polling contract
-- Create SCT viewing keys?
-- Convert SCT to secretjs?
 - Link-up front end to blockchain
 
 
