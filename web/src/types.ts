@@ -10,14 +10,12 @@ export interface PollOption {
 }
 
 export interface Poll {
-  /** Unique identifier (e.g. SHA-256 of creator+timestamp) */
+  /** Unique identifier (SHA-256 of title+options) */
   pollId: string;
   /** Short summary of the poll */
   title: string;
   /** Full question or context */
   description: string;
-  /** Soulbound credential holder who created it (hashed for privacy) */
-  creator: string;
   /** When the poll was created */
   createdAt: Date;
   /** List of voting options */

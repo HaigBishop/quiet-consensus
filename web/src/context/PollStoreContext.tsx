@@ -83,7 +83,6 @@ const createInitialState = (): PollStore => {
       pollId: "poll-1-biblical-fruit-crossing",
       title: "Which Biblical Fruit Salad Would You Choose?",
       description: "If you had to cross biblical fruits to create the ultimate divine snack, which combination would be most blessed?",
-      creator: "fruitful-disciple-42",
       createdAt: new Date('2025-01-15T10:00:00Z'),
       options: [
         { optionId: "opt-1", text: "Apple of Eden × Pomegranate of Solomon" },
@@ -97,7 +96,6 @@ const createInitialState = (): PollStore => {
       pollId: "poll-2-crossing-red-sea-snacks",
       title: "Best Snack for Crossing the Red Sea?",
       description: "Moses forgot to pack snacks for the 40-year desert journey. What fruit would have made the crossing more bearable?",
-      creator: "wandering-foodie-moses",
       createdAt: new Date('2025-01-16T14:30:00Z'),
       options: [
         { optionId: "opt-1", text: "Miracle Manna-infused Melons" },
@@ -112,7 +110,6 @@ const createInitialState = (): PollStore => {
       pollId: "poll-3-noah-fruit-ark",
       title: "Fruit Species for Noah's Ark 2.0?",
       description: "Noah's building a new ark, but this time it's just for fruit trees. Which crosses should he save for humanity?",
-      creator: "8f2b6d97cce113f0a21e4a2dbece7f3b4c0e229b4a78efc1d09f7c3a8e5b6d42",
       createdAt: new Date('2025-01-17T09:15:00Z'),
       options: [
         { optionId: "opt-1", text: "Rainbow Covenant Coconuts × Dove-delivered Olives" },

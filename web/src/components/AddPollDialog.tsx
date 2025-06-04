@@ -81,7 +81,7 @@ const AddPollDialog = ({ isOpen, onClose }: AddPollDialogProps) => {
     setIsSubmitting(true);
 
     try {
-      // Generate poll data
+      // Generate poll data (PLACEHOLDER)
       const creator = generateRandomHex(64); // 256-bit hex string
       const timestamp = new Date().toISOString();
       const pollId = await generateSHA256(`${creator}${timestamp}${title}`);
@@ -95,7 +95,6 @@ const AddPollDialog = ({ isOpen, onClose }: AddPollDialogProps) => {
         pollId,
         title: title.trim(),
         description: description.trim(),
-        creator,
         createdAt: new Date(),
         options: pollOptions,
         tally: new Array(pollOptions.length).fill(0),

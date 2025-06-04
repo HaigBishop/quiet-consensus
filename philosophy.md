@@ -1,10 +1,5 @@
 # Quiet Consensus
 
-## Other Pages
-- [README.md](../README.md)
-- [Quiet Consensus](./qui-con.md)
-- [Architecture](./architecture.md)
-
 ## Overview
 Quiet Consensus is an online opinion polling site which uses the secret network blockchain to hold the state of polls. Users can view the newest or trending polls on topics of interest while knowing that each vote belongs to a real human being from a particular group of people, and that no single human being could make more than one vote on each poll.
 
