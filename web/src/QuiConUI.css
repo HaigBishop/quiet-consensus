@@ -21,6 +21,7 @@ Implements the split-panel layout with neon pink accent color.
   --dark-pink: #cc0056;
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e3e4e9;
   --text-primary: #212529;
   --text-secondary: #6c757d;
   --border-color: #d4d6d8;
@@ -44,6 +45,7 @@ Implements the split-panel layout with neon pink accent color.
 .quicon-container.dark-mode {
   --bg-primary: #000000;
   --bg-secondary: #1a1a1a;
+  --bg-tertiary: #141414;
   --text-primary: #ffffff;
   --text-secondary: #adb5bd;
   --border-color: #333333;
@@ -58,7 +60,8 @@ Implements the split-panel layout with neon pink accent color.
   border-bottom: 2px solid var(--border-color);
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
+  justify-content: space-between;
+  padding: 0 1.5rem;
   flex-shrink: 0;
 }
 
@@ -328,4 +331,78 @@ Implements the split-panel layout with neon pink accent color.
 .icon-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Wallet Section */
+.wallet-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wallet-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wallet-button:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--neon-pink);
+}
+
+.wallet-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.wallet-status.connected {
+  background-color: var(--neon-pink);
+}
+
+.wallet-status.disconnected {
+  background-color: #ef4444;
+}
+
+/* No Wallet Message */
+.no-wallet-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  color: #999;
+}
+
+.connect-prompt-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--neon-pink);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.connect-prompt-button:hover {
+  background-color: var(--neon-pink);
+}
+
+/* Wallet Info in Options */
+.wallet-info {
+  font-size: 0.85rem;
+  color: #999;
+  word-break: break-all;
 } 

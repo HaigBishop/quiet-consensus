@@ -46,6 +46,7 @@ fn main() {
     export_schema(&schema_for!(InstantiateMsg), &out_dir);
     export_schema(&schema_for!(ExecuteMsg), &out_dir);
     export_schema(&schema_for!(QueryMsg), &out_dir);
+    export_schema(&schema_for!(State), &out_dir);
     export_schema(&schema_for!(QueryWithPermit), &out_dir);
     export_schema(&schema_for!(QueryAnswer), &out_dir);
     

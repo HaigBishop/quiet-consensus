@@ -3,9 +3,10 @@ The main user interface component for Quiet Consensus.
 Provides a split-panel layout with polls on the left and options on the right.
 */
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import './QuiConUI.css';
 import { usePollStore } from './context/PollStoreContext';
+import { SecretJsContext } from './secretjs/SecretJsContext';
 import { formatTimeAgo } from './utils/timeUtils';
 import ViewPollDialog from './components/ViewPollDialog';
 import AddPollDialog from './components/AddPollDialog';
@@ -17,6 +18,7 @@ const QuiConUI = () => {
     const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const { pollStore, refreshPolls } = usePollStore();
+    const secretJsContext = useContext(SecretJsContext);
 
     const handleRefresh = async () => {
         await refreshPolls();
@@ -27,7 +29,9 @@ const QuiConUI = () => {
     };
 
     const handlePollClick = (poll: Poll) => {
-        setSelectedPoll(poll);
+        // Get the latest poll data from the store
+        const latestPoll = pollStore.polls[poll.pollId] || poll;
+        setSelectedPoll(latestPoll);
         setIsViewDialogOpen(true);
     };
 
@@ -40,8 +44,24 @@ const QuiConUI = () => {
         setIsAddDialogOpen(false);
     };
 
+    const handleWalletConnect = async () => {
+        if (secretJsContext?.secretAddress) {
+            // Disconnect
+            secretJsContext.disconnectWallet();
+        } else {
+            // Connect
+            await secretJsContext?.connectWallet();
+        }
+    };
+
     // Convert polls object to array for display
     const pollsArray = Object.values(pollStore.polls);
+
+    // Format wallet address for display
+    const formatAddress = (address: string) => {
+        if (!address) return '';
+        return `${address.slice(0, 10)}...${address.slice(-6)}`;
+    };
 
     return (
         <div className={`quicon-container ${isDarkMode ? 'dark-mode' : ''}`}>
@@ -50,6 +70,24 @@ const QuiConUI = () => {
                 <div className="logo-section">
                     <img src="/icon.png" alt="Quiet Consensus Logo" className="logo" />
                     <span className="app-title">Quiet Consensus</span>
+                </div>
+                <div className="wallet-section">
+                    <button 
+                        className="wallet-button"
+                        onClick={handleWalletConnect}
+                    >
+                        {secretJsContext?.secretAddress ? (
+                            <>
+                                <span className="wallet-status connected"></span>
+                                {formatAddress(secretJsContext.secretAddress)}
+                            </>
+                        ) : (
+                            <>
+                                <span className="wallet-status disconnected"></span>
+                                No Wallet Connected
+                            </>
+                        )}
+                    </button>
                 </div>
             </div>
 
@@ -63,8 +101,9 @@ const QuiConUI = () => {
                             <button 
                                 className={`icon-button ${pollStore.isLoading ? 'loading' : ''}`}
                                 onClick={handleRefresh}
-                                disabled={pollStore.isLoading}
+                                disabled={pollStore.isLoading || !secretJsContext?.secretJs}
                                 aria-label="Refresh polls"
+                                title={!secretJsContext?.secretJs ? "Connect wallet to refresh" : "Refresh polls"}
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
@@ -73,7 +112,9 @@ const QuiConUI = () => {
                             <button 
                                 className="icon-button" 
                                 onClick={handleAddPoll}
+                                disabled={!secretJsContext?.secretJs}
                                 aria-label="Add new poll"
+                                title={!secretJsContext?.secretJs ? "Connect wallet to create polls" : "Add new poll"}
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <line x1="12" y1="2" x2="12" y2="22" />
@@ -83,7 +124,14 @@ const QuiConUI = () => {
                         </div>
                     </div>
                     <div className="polls-content">
-                        {pollStore.isLoading ? (
+                        {!secretJsContext?.secretJs ? (
+                            <div className="no-wallet-message">
+                                <p>Connect your wallet to view and create polls</p>
+                                <button className="connect-prompt-button" onClick={handleWalletConnect}>
+                                    Connect Wallet
+                                </button>
+                            </div>
+                        ) : pollStore.isLoading && pollsArray.length === 0 ? (
                             <div className="loading-message">Loading polls from blockchain...</div>
                         ) : pollsArray.length > 0 ? (
                             <div className="polls-list">
@@ -130,6 +178,13 @@ const QuiConUI = () => {
                             <div className="option-item">
                                 <span className="last-refresh">
                                     Last refresh: {pollStore.lastRefresh.toLocaleTimeString()} ({formatTimeAgo(pollStore.lastRefresh)} ago)
+                                </span>
+                            </div>
+                        )}
+                        {secretJsContext?.secretAddress && (
+                            <div className="option-item">
+                                <span className="wallet-info">
+                                    Wallet: {formatAddress(secretJsContext.secretAddress)}
                                 </span>
                             </div>
                         )}

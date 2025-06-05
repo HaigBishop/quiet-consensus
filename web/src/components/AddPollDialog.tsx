@@ -4,9 +4,7 @@ Shows as a modal overlay with form inputs for title, description, and options.
 */
 
 import { useState } from 'react';
-import type { Poll, PollOption } from '../types';
 import { usePollStore } from '../context/PollStoreContext';
-import { generateSHA256, generateRandomHex } from '../utils/cryptoUtils';
 import './AddPollDialog.css';
 
 interface AddPollDialogProps {
@@ -15,7 +13,7 @@ interface AddPollDialogProps {
 }
 
 const AddPollDialog = ({ isOpen, onClose }: AddPollDialogProps) => {
-  const { addPoll } = usePollStore();
+  const { refreshPolls, secretJsFunctions } = usePollStore();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [options, setOptions] = useState<string[]>(['', '']);
@@ -81,34 +79,23 @@ const AddPollDialog = ({ isOpen, onClose }: AddPollDialogProps) => {
     setIsSubmitting(true);
 
     try {
-      // Generate poll data (PLACEHOLDER)
-      const creator = generateRandomHex(64); // 256-bit hex string
-      const timestamp = new Date().toISOString();
-      const pollId = await generateSHA256(`${creator}${timestamp}${title}`);
+      // Submit poll to blockchain
+      await secretJsFunctions.makePoll(
+        title.trim(),
+        description.trim(),
+        validOptions.map(opt => opt.trim())
+      );
       
-      const pollOptions: PollOption[] = validOptions.map((text, index) => ({
-        optionId: `opt-${index + 1}`,
-        text: text.trim()
-      }));
-
-      const newPoll: Poll = {
-        pollId,
-        title: title.trim(),
-        description: description.trim(),
-        createdAt: new Date(),
-        options: pollOptions,
-        tally: new Array(pollOptions.length).fill(0)
-      };
-
-      // TODO: In the future, submit poll to blockchain instead of just adding to store
-      addPoll(newPoll);
+      console.log('Poll created successfully');
       
-      console.log('Poll created successfully:', newPoll);
+      // Refresh polls to show the new one
+      await refreshPolls();
+      
       handleClose();
       
     } catch (error) {
       console.error('Failed to create poll:', error);
-      alert('Failed to create poll. Please try again.');
+      alert(`Failed to create poll: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsSubmitting(false);
     }

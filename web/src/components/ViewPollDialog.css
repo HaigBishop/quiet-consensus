@@ -358,4 +358,37 @@ Implements modal overlay, dialog layout, voting interface, and results visualiza
   .option-text {
     font-size: 0.9rem;
   }
+}
+
+/* User vote info */
+.user-vote-info {
+    color: var(--neon-pink);
+    font-weight: 500;
+}
+
+/* User voted option */
+.poll-option.user-voted {
+    border-color: var(--neon-pink);
+}
+
+/* Voted badge */
+.voted-badge {
+    margin-left: 0.5rem;
+    color: var(--neon-pink);
+    font-weight: bold;
+}
+
+/* Voting status */
+.voting-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.voting-status .loading-icon {
+    animation: spin 1s linear infinite;
 } 

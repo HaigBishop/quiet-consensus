@@ -36,8 +36,8 @@ This results in `poll/contract/contract.wasm.gz`
    `cd ~/Repos/quiet-consensus/poll/uploader`
 2. Ensure your `.env` file contains the `POLLING_CONTRACT_CODE_ID` and `POLLING_CONTRACT_CODE_HASH` values from the upload step
 3. Run `npm run instantiate` (this reads the code ID and code hash from your `.env` file)
-4. Record the resulting Contract address and put it along with the Contract hash in `web/.env` like:
+4. Record the resulting Contract address and put it along with the Contract hash in `web/config.ts` like:
     ```
-    POLLING_CONTRACT_ADDRESS="secret1xlzx8h0lhe9h768eqe75490sttqkvwaa349wwp"
-    POLLING_CONTRACT_CODE_HASH="ae27de1ca2c38f9664a94898cdb7226ac6650798c55e86279a84a7a13ea187f5"
+    export const POLLING_CONTRACT_ADDRESS = "secret1xlzx8h0lhe9h768eqe75490sttqkvwaa349wwp";
+    export const POLLING_CONTRACT_CODE_HASH = "ae27de1ca2c38f9664a94898cdb7226ac6650798c55e86279a84a7a13ea187f5"; 
     ```

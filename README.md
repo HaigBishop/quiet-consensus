@@ -1,7 +1,6 @@
 # quiet-consensus
 
 ## To Do
-- Link-up front end to blockchain
 - Finish the polling contract (SCT contract connection)
 
 

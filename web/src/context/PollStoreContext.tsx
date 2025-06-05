@@ -3,9 +3,14 @@ PollStore context for managing poll state across the application.
 PollStore is a glorified list of polls that represents the last synced state.
 */
 
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { Poll, PollStore } from '../types';
+import { SecretJsFunctions } from '../secretjs/SecretJsFunctions';
+import { SecretJsContext } from '../secretjs/SecretJsContext';
+
+// Poll refresh frequency in milliseconds (30 seconds)
+const POLL_REFRESH_FREQUENCY = 30000;
 
 // Actions for the PollStore reducer
 type PollStoreAction = 
@@ -69,64 +74,19 @@ interface PollStoreContextType {
   setPolls: (polls: Poll[]) => void;
   setLoading: (loading: boolean) => void;
   refreshPolls: () => Promise<void>;
+  // Secret.js functions
+  secretJsFunctions: ReturnType<typeof SecretJsFunctions>;
 }
 
 // Create context
 const PollStoreContext = createContext<PollStoreContextType | undefined>(undefined);
 
-// Initial state with example polls
-// NOTE: This is temporary - in the future, PollStore will be initialized as empty 
-// and refreshPolls() will be called immediately to fetch real data
+// Initial state - empty, will be populated from blockchain
 const createInitialState = (): PollStore => {
-  const examplePolls: Poll[] = [
-    {
-      pollId: "poll-1-biblical-fruit-crossing",
-      title: "Which Biblical Fruit Salad Would You Choose?",
-      description: "If you had to cross biblical fruits to create the ultimate divine snack, which combination would be most blessed?",
-      createdAt: new Date('2025-01-15T10:00:00Z'),
-      options: [
-        { optionId: "opt-1", text: "Apple of Eden × Pomegranate of Solomon" },
-        { optionId: "opt-2", text: "Grapes of Canaan × Figs of Bethany" },
-        { optionId: "opt-3", text: "Olives of Gethsemane × Dates of Jericho" }
-      ],
-      tally: [15, 23, 8]
-    },
-    {
-      pollId: "poll-2-crossing-red-sea-snacks",
-      title: "Best Snack for Crossing the Red Sea?",
-      description: "Moses forgot to pack snacks for the 40-year desert journey. What fruit would have made the crossing more bearable?",
-      createdAt: new Date('2025-01-16T14:30:00Z'),
-      options: [
-        { optionId: "opt-1", text: "Miracle Manna-infused Melons" },
-        { optionId: "opt-2", text: "Staff-blessed Citrus (turns into serpent when needed)" },
-        { optionId: "opt-3", text: "Burning Bush Berries (self-heating!)" },
-        { optionId: "opt-4", text: "Parted Peaches (split perfectly every time)" }
-      ],
-      tally: [12, 25, 7, 25]
-    },
-    {
-      pollId: "poll-3-noah-fruit-ark",
-      title: "Fruit Species for Noah's Ark 2.0?",
-      description: "Noah's building a new ark, but this time it's just for fruit trees. Which crosses should he save for humanity?",
-      createdAt: new Date('2025-01-17T09:15:00Z'),
-      options: [
-        { optionId: "opt-1", text: "Rainbow Covenant Coconuts × Dove-delivered Olives" },
-        { optionId: "opt-2", text: "Two-by-Two Tangerines × Flood-resistant Bananas" },
-        { optionId: "opt-3", text: "Ark-sized Avocados × Covenant Cherries" }
-      ],
-      tally: [31, 18, 22]
-    }
-  ];
-
-  const pollsMap = examplePolls.reduce((acc, poll) => {
-    acc[poll.pollId] = poll;
-    return acc;
-  }, {} as Record<string, Poll>);
-
   return {
-    polls: pollsMap,
+    polls: {},
     isLoading: false,
-    lastRefresh: new Date()
+    lastRefresh: undefined
   };
 };
 
@@ -137,6 +97,11 @@ interface PollStoreProviderProps {
 
 export const PollStoreProvider = ({ children }: PollStoreProviderProps) => {
   const [pollStore, dispatch] = useReducer(pollStoreReducer, createInitialState());
+  const secretJsContext = useContext(SecretJsContext);
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Call the SecretJsFunctions hook at the component level
+  const secretJsFunctions = SecretJsFunctions();
 
   // Helper functions
   const addPoll = (poll: Poll) => {
@@ -158,17 +123,61 @@ export const PollStoreProvider = ({ children }: PollStoreProviderProps) => {
   const refreshPolls = async () => {
     setLoading(true);
     try {
-      // TODO: Replace with actual API call to fetch polls
-      // For now, just simulate a network delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Polls refreshed.');
+      // Check if wallet is connected
+      if (!secretJsContext?.secretJs) {
+        console.log('Wallet not connected, skipping poll refresh');
+        return;
+      }
+
+      const polls = await secretJsFunctions.getPolls();
+      console.log('Fetched polls from blockchain:', polls);
+      setPolls(polls);
     } catch (error) {
       console.error('Failed to refresh polls:', error);
+      // Don't throw - just log the error so the UI doesn't crash
     } finally {
       setLoading(false);
       dispatch({ type: 'SET_LAST_REFRESH', payload: new Date() });
     }
   };
+
+  // Auto-refresh polls when wallet connects
+  useEffect(() => {
+    if (secretJsContext?.secretJs) {
+      refreshPolls();
+    }
+  }, [secretJsContext?.secretJs]);
+
+  // Set up periodic refresh
+  useEffect(() => {
+    if (secretJsContext?.secretJs) {
+      // Clear any existing interval
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+      }
+
+      // Set up new interval for periodic refresh
+      refreshIntervalRef.current = setInterval(() => {
+        refreshPolls();
+      }, POLL_REFRESH_FREQUENCY);
+
+      console.log(`Auto-refresh enabled: polls will refresh every ${POLL_REFRESH_FREQUENCY / 1000} seconds`);
+    } else {
+      // Clear interval if wallet disconnected
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+        console.log('Auto-refresh disabled: wallet disconnected');
+      }
+    }
+
+    // Cleanup interval on unmount
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+      }
+    };
+  }, [secretJsContext?.secretJs]);
 
   const value: PollStoreContextType = {
     pollStore,
@@ -177,7 +186,8 @@ export const PollStoreProvider = ({ children }: PollStoreProviderProps) => {
     updatePoll,
     setPolls,
     setLoading,
-    refreshPolls
+    refreshPolls,
+    secretJsFunctions
   };
 
   return (
