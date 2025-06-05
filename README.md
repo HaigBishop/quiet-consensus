@@ -3,13 +3,11 @@
 Quiet Consensus is a totally anonymous polling platform made possible with Secret Network. It also only allows voting by individuals that hold a Soulbound Credential Token (SCT), ensuring that every vote originates from a single person, and no single person can vote multiple times. Quiet Consensus is accessible via a webpage and by using the Keplr wallet.
 
 ### Key Features
-- Perfectly anonymous polling
-- Sybil resistance
-- Smooth frontend webpage
+- **Perfectly anonymous polling**: Votes are completely private thanks to Secret Network
+- **Sybil resistance**: Only SCT (Soulbound Credential Token) holders can vote, ensuring one person = one vote
+- **Smooth frontend webpage**: Intuitive React interface with automated permit handling
 
 
-## To Do
-- Finish the polling contract (SCT contract connection)
 
 
 ## Repository Structure
@@ -45,6 +43,37 @@ quiet-consensus/
 ### Frontend Component (`web/`)
 - Single page React web application
 - Contains secretjs API with the polling contract
+
+
+
+## How to Deploy
+
+This is a high-level overview of how to deploy all components of the Quiet Consensus project onto the Secret test net.
+
+### Instantiate and Mint SCTs
+
+See `sct/creating_the_sct_contract.md` and `sct/minting_sct_nfts.md` for clear instructions.
+
+1. Create admin account in Keplr and fund via faucet
+2. Upload and instantiate SCT contract (`sct/uploader/`)
+    (update `web/src/config.ts` with contract addresses and hashes)
+3. Create user accounts in Keplr and fund them
+4. Mint SCTs to users
+
+### Instatiate the Polling Contract
+
+See `poll/creating_the_polling_contract.md` for clear instructions.
+
+1. Compile polling contract (`poll/contract/`)
+2. Upload and instantiate polling contract (`poll/uploader/`)
+    (update `web/src/config.ts` with contract addresses and hashes)
+
+### Hosting the Front End
+
+See `hosting_front_end.md` for clear instructions.
+
+1. Ensure the correct contract addresses are set in `web/src/config.ts`
+2. Run `npm install && npm run dev` in `web/` directory
 
 
 

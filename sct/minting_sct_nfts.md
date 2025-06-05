@@ -5,12 +5,10 @@ This document describes minting three non-transferable SCT NFTs using TypeScript
 
 ## Prerequisites
 
-Ensure your `.env` file contains:
+Ensure your `.env` file in `sct/uploader/` contains:
 - `ADMIN_MNEMONIC` - The admin wallet mnemonic
-- `SCT_CONTRACT_ADDRESS` - The deployed SCT contract address
 - `SCT_CODE_HASH` - The SCT contract code hash
-- User addresses (`USER1_ADDRESS`, `USER2_ADDRESS`, `USER3_ADDRESS`)
-- User mnemonics (`USER1_MNEMONIC`, `USER2_MNEMONIC`, `USER3_MNEMONIC`)
+- `SCT_CONTRACT_ADDRESS` - The deployed SCT contract address
 
 
 ## 1. Create the user accounts in Keplr
@@ -50,7 +48,7 @@ Paste in each wallet address and request tokens. You can use incognito mode to u
 ## 3. Mint non-transferable SCT NFTs
 
 1. Make sure you're in `sct/uploader/`
-2. Ensure your `.env` file has all required values
+2. Ensure your `.env` file in `sct/uploader/` has all required values
 3. Run `npm run mint`
 
     This will:
@@ -88,7 +86,7 @@ Paste in each wallet address and request tokens. You can use incognito mode to u
     All transaction logs and ownership info saved to logs/ directory
     ```
 
-5. You may want to say the viewing keys in `.env`, like this:
+5. Optional: You may want to save the viewing keys in `.env`, like this:
 
    ```
    USER1_VIEWING_KEY="0afcxj7wv1pluaiuaqx0o2"

@@ -16,8 +16,12 @@ This document describes the process of creating the soulbound credential token (
 
 ### 2. Setting up the environment
 
-1. Move to `sct/uploader/`
-2. Update the `.env` file with your admin wallet details
+1. Update the `.env` file at `sct/uploader/.env` with your admin wallet mnemonic and address like:
+
+   ```
+   ADMIN_MNEMONIC="stuff result visual zero coconut auction relax acquire divide soon link duck"
+   ADMIN_ADDRESS="secret1ve9p7363enrj9v5f3fq428tqxvzl836wgrgk3w"
+   ```
 
 
 ### 3. Installing dependencies
@@ -41,12 +45,17 @@ This will:
 - Upload it to the Secret Test Network
 - Display the Code ID and Code Hash
 
-Record the resulting Code ID and Code Hash. Update your `.env` file with these values:
+Record the resulting Code ID and Code Hash. Update your `.env` file in `sct/uploader/` with these values:
 ```
-SCT_CODE_ID="14505"
+SCT_CODE_ID="14544"
 SCT_CODE_HASH="773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
 ```
 
+Update your `.env` file in `poll/uploader/`:
+
+```
+SCT_CODE_HASH="773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
+```
 
 ## Instantiating the SCT contract
 
@@ -61,9 +70,25 @@ This will:
 - Set your admin account as the contract admin
 - Display the contract address
 
-Record the resulting Contract address. Update your `.env` file:
+Record the resulting Contract address.
+
+Update your `.env` file in `sct/uploader/`:
+
 ```
-SCT_CONTRACT_ADDRESS="secret1s0xxet7evly0p6ry3r74tml244dj9m3737pa8g"
+SCT_CONTRACT_ADDRESS="secret13vvh7vhrkkwq7jj0xvcjujj0hz722074pt6mnm"
+```
+
+Update your `.env` file in `poll/uploader/`:
+
+```
+SCT_CODE_HASH="773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
+SCT_CONTRACT_ADDRESS="secret13vvh7vhrkkwq7jj0xvcjujj0hz722074pt6mnm"
+```
+
+Update your `config.ts` file in `web/src/`:
+
+```
+export const SCT_CONTRACT_ADDRESS = "secret13vvh7vhrkkwq7jj0xvcjujj0hz722074pt6mnm";
 ```
 
 
