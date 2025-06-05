@@ -8,7 +8,7 @@ This script instantiates an uploaded SCT (SNIP-721) contract on the Secret Test 
 // Import the Secret Network client and wallet classes
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { ADMIN_MNEMONIC, ADMIN_ADDRESS, SCT_CODE_ID, SCT_CODE_HASH } from "./config";
-import { updateConfig, updatePollConfig } from "./config-updater";
+import { updateConfig, updatePollConfig, updateWebConfig } from "./config-updater";
 
 console.log("ADMIN_MNEMONIC: ", ADMIN_MNEMONIC);
 console.log("ADMIN_ADDRESS: ", ADMIN_ADDRESS);
@@ -121,6 +121,13 @@ export const main = async (): Promise<void> => {
     // Also update the poll uploader config with both SCT values
     console.log("\nUpdating poll uploader config.ts file...");
     updatePollConfig([
+        { key: "SCT_CODE_HASH", value: SCT_CODE_HASH },
+        { key: "SCT_CONTRACT_ADDRESS", value: contract_address }
+    ]);
+    
+    // Also update the web config with both SCT values
+    console.log("\nUpdating web config.ts file...");
+    updateWebConfig([
         { key: "SCT_CODE_HASH", value: SCT_CODE_HASH },
         { key: "SCT_CONTRACT_ADDRESS", value: contract_address }
     ]);

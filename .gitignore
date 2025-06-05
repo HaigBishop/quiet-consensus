@@ -7,3 +7,7 @@ artifacts
 poll/uploader/dist
 .DS_Store
 
+repository-structure.md
+secret-toolkit-SNIP-721-interface.md
+SNIP-721.md
+viewing-keys.md

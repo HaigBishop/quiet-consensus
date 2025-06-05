@@ -11,7 +11,7 @@ import * as fs from "fs";
 import { execSync } from "child_process";
 import * as path from "path";
 import { ADMIN_MNEMONIC } from "./config";
-import { updateConfig } from "./config-updater";
+import { updateConfig, updateWebConfig } from "./config-updater";
 
 console.log("ADMIN_MNEMONIC: ", ADMIN_MNEMONIC);
 
@@ -195,6 +195,12 @@ export const main = async (): Promise<void> => {
     console.log("\nUpdating config.ts file...");
     updateConfig([
         { key: "SCT_CODE_ID", value: result.code_id },
+        { key: "SCT_CODE_HASH", value: result.code_hash! }
+    ]);
+    
+    // Also update the web config with SCT code hash
+    console.log("\nUpdating web config.ts file...");
+    updateWebConfig([
         { key: "SCT_CODE_HASH", value: result.code_hash! }
     ]);
     

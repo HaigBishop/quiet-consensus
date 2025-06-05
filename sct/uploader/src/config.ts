@@ -21,11 +21,11 @@ export const USER3_MNEMONIC = "peace bomb camera exhaust asthma own employ dream
 export const USER3_ADDRESS = "secret14evc5pmhz9sm5z55cztl6r5h6lmx7qwuuz0gwy"
 
 // SCT contract details
-export const SCT_CODE_ID = "14563";
+export const SCT_CODE_ID = "14581";
 export const SCT_CODE_HASH = "773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8";
-export const SCT_CONTRACT_ADDRESS = "secret13vd8530zjjcu56nja2f4nfvtrgj0wjfqkacref";
+export const SCT_CONTRACT_ADDRESS = "secret1v0hea4vcxjqxzyj5p2076xuanhrawm74wmkwvd";
 
 // SCT viewing keys
-export const USER1_VIEWING_KEY = "4vrttfinqmg7obzd6nm9ad";
-export const USER2_VIEWING_KEY = "b9w5rbkym8czv14si2a7";
-export const USER3_VIEWING_KEY = "h36rbuwyxbq0m2b2t62alsp";
+export const USER1_VIEWING_KEY = "h8b09bcdpfei4rz1k4z6w";
+export const USER2_VIEWING_KEY = "19zht4n0aqfsozvexoil8";
+export const USER3_VIEWING_KEY = "2mep61jlo0via8qfzvlxh";

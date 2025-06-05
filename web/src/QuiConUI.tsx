@@ -10,6 +10,7 @@ import { SecretJsContext } from './secretjs/SecretJsContext';
 import { formatTimeAgo } from './utils/timeUtils';
 import ViewPollDialog from './components/ViewPollDialog';
 import AddPollDialog from './components/AddPollDialog';
+import SCTStatusBox from './components/SCTStatusBox';
 import type { Poll } from './types';
 
 const QuiConUI = () => {
@@ -72,6 +73,7 @@ const QuiConUI = () => {
                     <span className="app-title">Quiet Consensus</span>
                 </div>
                 <div className="wallet-section">
+                    <SCTStatusBox />
                     <button 
                         className="wallet-button"
                         onClick={handleWalletConnect}
@@ -185,6 +187,19 @@ const QuiConUI = () => {
                             <div className="option-item">
                                 <span className="wallet-info">
                                     Wallet: {formatAddress(secretJsContext.secretAddress)}
+                                </span>
+                            </div>
+                        )}
+                        {secretJsContext?.secretAddress && secretJsContext?.sctStatus && (
+                            <div className="option-item">
+                                <span className="wallet-info">
+                                    SCT Status: {
+                                        secretJsContext.sctStatus === 'loading' ? 'Checking...' :
+                                        secretJsContext.sctStatus === 'has_sct' ? 'Verified ✓' :
+                                        secretJsContext.sctStatus === 'no_sct' ? 'Not Found ✗' :
+                                        secretJsContext.sctStatus === 'error' ? 'Error ⚠' : 
+                                        'Unknown'
+                                    }
                                 </span>
                             </div>
                         )}

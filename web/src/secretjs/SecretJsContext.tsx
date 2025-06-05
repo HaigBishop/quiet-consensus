@@ -22,6 +22,14 @@ import { SecretNetworkClient } from "secretjs";
 const SECRET_CHAIN_ID = "pulsar-3";
 const SECRET_LCD = "https://pulsar.lcd.secretnodes.com";
 
+// SCT status enum
+enum SCTStatus {
+    LOADING = 'loading',
+    HAS_SCT = 'has_sct', 
+    NO_SCT = 'no_sct',
+    ERROR = 'error'
+}
+
 interface SecretJsContextType {
     secretJs: SecretNetworkClient | null;
     setSecretJs: Dispatch<SetStateAction<SecretNetworkClient | null>>;
@@ -29,6 +37,9 @@ interface SecretJsContextType {
     setSecretAddress: Dispatch<SetStateAction<string>>;
     connectWallet: () => Promise<void>;
     disconnectWallet: () => void;
+    sctStatus: SCTStatus | null;
+    setSctStatus: Dispatch<SetStateAction<SCTStatus | null>>;
+    checkSCTStatus: () => Promise<void>;
 }
 
 // Create the context with undefined default (will be provided by the provider)
@@ -42,6 +53,7 @@ interface SecretJsContextProviderProps {
 const SecretJsContextProvider: FC<SecretJsContextProviderProps> = ({ children }) => {
     const [secretJs, setSecretJs] = useState<SecretNetworkClient | null>(null);
     const [secretAddress, setSecretAddress] = useState<string>("");
+    const [sctStatus, setSctStatus] = useState<SCTStatus | null>(null);
 
     async function setupKeplr(
         setSecretJs: Dispatch<SetStateAction<SecretNetworkClient | null>>,
@@ -107,12 +119,27 @@ const SecretJsContextProvider: FC<SecretJsContextProviderProps> = ({ children })
         // reset secretjs and secretAddress
         setSecretAddress("");
         setSecretJs(null);
+        setSctStatus(null);
 
         // disable auto connect
         localStorage.setItem("keplrAutoConnect", "false");
 
         // console.log for success
         console.log("Wallet disconnected!");
+    }
+
+    async function checkSCTStatus(): Promise<void> {
+        if (!secretJs || !secretAddress) {
+            setSctStatus(null);
+            return;
+        }
+
+        setSctStatus(SCTStatus.LOADING);
+        console.log("Checking SCT status...");
+        
+        // Note: The actual SCT checking logic is implemented in the SCTStatusBox component
+        // since it has access to the SecretJsFunctions hook. This function is kept for
+        // consistency and potential future use.
     }
 
     return (
@@ -124,6 +151,9 @@ const SecretJsContextProvider: FC<SecretJsContextProviderProps> = ({ children })
                 setSecretAddress,
                 connectWallet,
                 disconnectWallet,
+                sctStatus,
+                setSctStatus,
+                checkSCTStatus,
             }}
         >
             {children}
@@ -135,4 +165,4 @@ const SecretJsContextProvider: FC<SecretJsContextProviderProps> = ({ children })
 // The constant export triggers a react-refresh warning, but for this project,
 // we'll keep it here for simplicity and disable the warning for this line.
 // eslint-disable-next-line react-refresh/only-export-components
-export { SecretJsContext, SecretJsContextProvider, SECRET_CHAIN_ID };
+export { SecretJsContext, SecretJsContextProvider, SECRET_CHAIN_ID, SCTStatus };

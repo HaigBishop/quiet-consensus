@@ -9,7 +9,7 @@ Quiet Consensus is a totally anonymous polling platform made possible with Secre
 
 
 ## To Do
-- Add SCT Verification
+- Add SCT Verification in polling contract
 
 
 
@@ -59,7 +59,7 @@ See `sct/creating_the_sct_contract.md` and `sct/minting_sct_nfts.md` for clear i
 
 1. Create admin account in Keplr and fund via faucet
 2. Upload and instantiate SCT contract (`sct/uploader/`)
-    (update `web/src/config.ts` with contract addresses and hashes)
+    (update `poll/uploader/src/config.ts` and `web/src/config.ts` with contract addresses and hashes)
 3. Create user accounts in Keplr and fund them
 4. Mint SCTs to users
 

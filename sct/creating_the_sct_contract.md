@@ -47,6 +47,7 @@ This will:
 - Upload it to the Secret Test Network
 - Display the Code ID and Code Hash
 - Automatically update your `config.ts` file with the new values
+- Also update the web config file with the SCT code hash
 
 ## Instantiating the SCT contract
 
@@ -62,6 +63,7 @@ This will:
 - Display the contract address
 - Automatically update your `config.ts` file with the contract address
 - Also update the poll uploader's `config.ts` file with SCT values for cross-project usage
+- Also update the web config file with both SCT code hash and contract address
 
 
 ## Next Steps

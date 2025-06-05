@@ -6,7 +6,7 @@ Provides hooks for executing polling contracts and querying poll data with permi
 import { useContext } from "react";
 import { SECRET_CHAIN_ID, SecretJsContext } from "./SecretJsContext";
 import { QueryError, WalletError } from "./SecretJsErrors";
-import { POLLING_CONTRACT_ADDRESS, POLLING_CONTRACT_CODE_HASH } from "../config";
+import { POLLING_CONTRACT_ADDRESS, POLLING_CONTRACT_CODE_HASH, SCT_CONTRACT_ADDRESS, SCT_CODE_HASH } from "../config";
 import type { Permit } from "secretjs";
 import type { Poll } from "../types";
 
@@ -39,6 +39,13 @@ type GetNumPollsResponse = {
 type GetMyVoteResponse = {
     get_my_vote: {
         vote: number | null;
+    };
+} | string;
+
+// SCT contract response types
+type SCTTokensResponse = {
+    token_list: {
+        tokens: string[];
     };
 } | string;
 
@@ -242,12 +249,108 @@ const SecretJsFunctions = () => {
         return permit;
     };
 
+    // SCT Functions
+    
+    // Create a viewing key for the SCT contract
+    const createSCTViewingKey = async (): Promise<string> => {
+        if (!secretJs || !secretAddress) throw new WalletError("no wallet connected");
+
+        // Generate a random viewing key
+        const viewingKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        
+        // Create the set viewing key message
+        const setViewingKeyMsg = {
+            sender: secretAddress,
+            contract_address: SCT_CONTRACT_ADDRESS,
+            code_hash: SCT_CODE_HASH,
+            msg: {
+                set_viewing_key: {
+                    key: viewingKey
+                }
+            }
+        };
+        
+        // Execute the set viewing key transaction
+        const tx = await secretJs.tx.compute.executeContract(
+            setViewingKeyMsg,
+            {
+                gasLimit: 100_000,
+            }
+        );
+        
+        // Check if transaction was successful
+        if (tx.code !== 0) {
+            throw new Error(`Set viewing key failed with code ${tx.code}: ${tx.rawLog}`);
+        }
+        
+        console.log('SCT viewing key created:', viewingKey);
+        return viewingKey;
+    };
+
+    // Check if the current wallet has any SCT NFTs
+    const checkSCTOwnership = async (): Promise<boolean> => {
+        if (!secretJs || !secretAddress) throw new WalletError("no wallet connected");
+
+        try {
+            // First, try to get or create a viewing key
+            const storageKey = `${secretAddress}:${SCT_CONTRACT_ADDRESS}:sctViewingKey`;
+            let viewingKey = localStorage.getItem(storageKey);
+            
+            if (!viewingKey) {
+                // Create a new viewing key
+                viewingKey = await createSCTViewingKey();
+                localStorage.setItem(storageKey, viewingKey);
+                
+                // Wait a moment for the viewing key to be processed
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+            
+            // Query the user's SCT NFTs using the viewing key
+            const query = {
+                tokens: {
+                    owner: secretAddress,
+                    viewing_key: viewingKey,
+                    limit: 30  // Check up to 30 NFTs
+                }
+            };
+            
+            const response = await secretJs.query.compute.queryContract({
+                contract_address: SCT_CONTRACT_ADDRESS,
+                code_hash: SCT_CODE_HASH,
+                query: query,
+            }) as SCTTokensResponse;
+            
+            if (typeof response === "string") {
+                throw new QueryError(response);
+            }
+            
+            // Check if user has any SCT NFTs
+            const hasTokens = response.token_list?.tokens && response.token_list.tokens.length > 0;
+            console.log('SCT ownership check:', hasTokens ? 'HAS SCT' : 'NO SCT', response.token_list?.tokens?.length || 0, 'tokens');
+            
+            return hasTokens || false;
+            
+        } catch (error) {
+            console.error('Failed to check SCT ownership:', error);
+            
+            // If viewing key error, clear it and let user try again
+            if (error instanceof Error && error.message.includes("viewing key")) {
+                const storageKey = `${secretAddress}:${SCT_CONTRACT_ADDRESS}:sctViewingKey`;
+                localStorage.removeItem(storageKey);
+            }
+            
+            throw error;
+        }
+    };
+
     return {
         makePoll,
         castVote,
         getPolls,
         getNumPolls,
         getMyVote,
+        createSCTViewingKey,
+        checkSCTOwnership,
     };
 };
 
