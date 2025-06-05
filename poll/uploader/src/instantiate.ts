@@ -7,15 +7,21 @@ This script instantiates an uploaded polling contract on the Secret Test Network
 
 // Import the Secret Network client and wallet classes
 import { SecretNetworkClient, Wallet } from "secretjs";
-import * as dotenv from "dotenv";
+import { 
+    ADMIN_MNEMONIC,
+    POLLING_CONTRACT_CODE_ID,
+    POLLING_CONTRACT_CODE_HASH,
+    SCT_CONTRACT_ADDRESS,
+    SCT_CODE_HASH
+} from "./config";
+import { updateWebConfig } from "./config-updater";
 
-// Load the environment variables
-dotenv.config();
-const admin_mnemonic = process.env.ADMIN_MNEMONIC;
-const code_id = process.env.POLLING_CONTRACT_CODE_ID;
-const code_hash = process.env.POLLING_CONTRACT_CODE_HASH;
-const sct_contract_address = process.env.SCT_CONTRACT_ADDRESS;
-const sct_code_hash = process.env.SCT_CODE_HASH;
+// Load the configuration
+const admin_mnemonic = ADMIN_MNEMONIC;
+const code_id = POLLING_CONTRACT_CODE_ID;
+const code_hash = POLLING_CONTRACT_CODE_HASH;
+const sct_contract_address = SCT_CONTRACT_ADDRESS;
+const sct_code_hash = SCT_CODE_HASH;
 
 console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
 console.log("POLLING_CONTRACT_CODE_ID: ", code_id);
@@ -23,30 +29,30 @@ console.log("POLLING_CONTRACT_CODE_HASH: ", code_hash);
 console.log("SCT_CONTRACT_ADDRESS: ", sct_contract_address);
 console.log("SCT_CODE_HASH: ", sct_code_hash);
 
-// Validate required environment variables
+// Validate required configuration values
 if (!admin_mnemonic) {
-    console.error("Error: ADMIN_MNEMONIC is required in .env file");
+    console.error("Error: ADMIN_MNEMONIC is required in config.ts file");
     process.exit(1);
 }
 
 if (!code_id) {
-    console.error("Error: POLLING_CONTRACT_CODE_ID is required in .env file");
+    console.error("Error: POLLING_CONTRACT_CODE_ID is required in config.ts file");
     process.exit(1);
 }
 
 if (!code_hash) {
-    console.error("Error: POLLING_CONTRACT_CODE_HASH is required in .env file");
+    console.error("Error: POLLING_CONTRACT_CODE_HASH is required in config.ts file");
     process.exit(1);
 }
 
 if (!sct_contract_address) {
-    console.error("Error: SCT_CONTRACT_ADDRESS is required in .env file");
+    console.error("Error: SCT_CONTRACT_ADDRESS is required in config.ts file");
     console.error("You need to deploy an SCT contract first. See: ../sct/creating_the_sct_contract.md");
     process.exit(1);
 }
 
 if (!sct_code_hash) {
-    console.error("Error: SCT_CODE_HASH is required in .env file");
+    console.error("Error: SCT_CODE_HASH is required in config.ts file");
     console.error("You need to deploy an SCT contract first. See: ../sct/creating_the_sct_contract.md");
     process.exit(1);
 }
@@ -145,12 +151,14 @@ export const main = async (): Promise<void> => {
     // Instantiate the contract using values from environment variables
     const contract_address = await instantiateContract(code_id!, code_hash!);
     
-    // Print the contract address for easy copying
-    console.log("\n=== IMPORTANT: Save this value ===");
-    console.log(`Contract address: ${contract_address}`);
-    console.log("\nUpdate your frontend .env file with:");
-    console.log(`POLLING_CONTRACT_ADDRESS="${contract_address}"`);
-    console.log(`POLLING_CONTRACT_CODE_HASH="${code_hash}"`);
+    // Automatically update web config file
+    updateWebConfig(contract_address, code_hash!);
+    
+    console.log("\n=== Contract Instantiation Complete ===");
+    console.log(`✓ Contract address: ${contract_address}`);
+    console.log("✓ The web/src/config.ts has been updated with:");
+    console.log(`  POLLING_CONTRACT_ADDRESS="${contract_address}"`);
+    console.log(`  POLLING_CONTRACT_CODE_HASH="${code_hash}"`);
 };
 
 main();

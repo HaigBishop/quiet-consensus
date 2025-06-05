@@ -26,21 +26,14 @@ This results in `poll/contract/contract.wasm.gz`
 3. Validate the contract (optional):
     `npm run validate`
 4. Run `npm run upload`
-5. Record the resulting Code id and Contract hash in the `.env`  file in `poll/uploader/` like:
-    ```
-    POLLING_CONTRACT_CODE_ID="14554"
-    POLLING_CONTRACT_CODE_HASH="ae155c48ceb59d415e7b6094ce4e102275cf8016661c96ad396c40a4d723b4f4"
-    ```
+    
+    The `config.ts` file will be automatically updated with the new Code ID and Contract hash.
 
 ### Instantiating the polling contract
 
-1. make sure you're in `poll/uploader/``
+1. Make sure you're in `poll/uploader/`
 
    `cd ~/Repos/quiet-consensus/poll/uploader`
-2. Ensure your `.env` file contains the `POLLING_CONTRACT_CODE_ID` and `POLLING_CONTRACT_CODE_HASH` values from the upload step
-3. Run `npm run instantiate` (this reads the code ID and code hash from your `.env` file)
-4. Record the resulting Contract address and put it along with the Contract hash in the `config.ts` file in `web/src/` like:
-    ```
-    export const POLLING_CONTRACT_CODE_HASH = "ae155c48ceb59d415e7b6094ce4e102275cf8016661c96ad396c40a4d723b4f4"; 
-    export const POLLING_CONTRACT_ADDRESS = "secret1e8q73q6mcmuxxwn7n3r3c0eg3442jqcdq93ys0";
-    ```
+2. Run `npm run instantiate`
+    
+    The `web/src/config.ts` file will be automatically updated with the Contract address and Contract hash.

@@ -5,7 +5,7 @@ This document describes minting three non-transferable SCT NFTs using TypeScript
 
 ## Prerequisites
 
-Ensure your `.env` file in `sct/uploader/` contains:
+Ensure your `config.ts` file in `sct/uploader/src/` contains:
 - `ADMIN_MNEMONIC` - The admin wallet mnemonic
 - `SCT_CODE_HASH` - The SCT contract code hash
 - `SCT_CONTRACT_ADDRESS` - The deployed SCT contract address
@@ -21,16 +21,16 @@ Ensure your `.env` file in `sct/uploader/` contains:
     - LCD: https://pulsar.lcd.secretnodes.com
 5. Copy the wallet's mnemonic and address
 6. Repeat for "Quiet Consensus User 2" and "Quiet Consensus User 3"
-7. Update your `.env` file with the user details:
-    ```
-    USER1_MNEMONIC="various double all gospel note trade major crane must mansion render they"
-    USER1_ADDRESS="secret1evmzszph47j8kymhkd8c76h2h5jhxgsd7wpauc"
+7. Update your `config.ts` file in `sct/uploader/src/` with the user details:
+    ```typescript
+    export const USER1_MNEMONIC = "various double all gospel note trade major crane must mansion render they";
+    export const USER1_ADDRESS = "secret1evmzszph47j8kymhkd8c76h2h5jhxgsd7wpauc";
     
-    USER2_MNEMONIC="bone meadow salute patient trust globe crush poet shell shoe join item"
-    USER2_ADDRESS="secret12u0xz7dtxp53s60jetnnd6wlfl468m34avjlpp"
+    export const USER2_MNEMONIC = "bone meadow salute patient trust globe crush poet shell shoe join item";
+    export const USER2_ADDRESS = "secret12u0xz7dtxp53s60jetnnd6wlfl468m34avjlpp";
     
-    USER3_MNEMONIC="peace bomb camera exhaust asthma own employ dream under noise electric adjust"
-    USER3_ADDRESS="secret14evc5pmhz9sm5z55cztl6r5h6lmx7qwuuz0gwy"
+    export const USER3_MNEMONIC = "peace bomb camera exhaust asthma own employ dream under noise electric adjust";
+    export const USER3_ADDRESS = "secret14evc5pmhz9sm5z55cztl6r5h6lmx7qwuuz0gwy";
     ```
 
 
@@ -48,7 +48,7 @@ Paste in each wallet address and request tokens. You can use incognito mode to u
 ## 3. Mint non-transferable SCT NFTs
 
 1. Make sure you're in `sct/uploader/`
-2. Ensure your `.env` file in `sct/uploader/` has all required values
+2. Ensure your `config.ts` file in `sct/uploader/src/` has all required values
 3. Run `npm run mint`
 
     This will:
@@ -56,6 +56,7 @@ Paste in each wallet address and request tokens. You can use incognito mode to u
     - Mint a non-transferable SCT NFT to each user from the admin account
     - Create viewing keys for each user account
     - Verify NFT ownership using the viewing keys
+    - Automatically update your `config.ts` file with the viewing keys
 4. Watch the output for confirmation, for example:
     ```
     Checking NFT ownership for Quiet Consensus User 1...
@@ -84,14 +85,10 @@ Paste in each wallet address and request tokens. You can use incognito mode to u
     User 3 viewing key: 408ec147ki9r31rl8iwjpk
     
     All transaction logs and ownership info saved to logs/ directory
+    
+    The config.ts has been updated with the viewing keys!
     ```
 
-5. Optional: You may want to save the viewing keys in `.env`, like this:
-
-   ```
-   USER1_VIEWING_KEY="0afcxj7wv1pluaiuaqx0o2"
-   USER2_VIEWING_KEY="np3931t9nmlbc0quow8cef"
-   USER3_VIEWING_KEY="u78lhftdhmqrpxjhb5txq"
-   ```
+The process is now complete! The script automatically updates your `config.ts` file with all the generated viewing keys.
 
    

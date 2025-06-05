@@ -7,15 +7,13 @@ This script uploads the SNIP-721 reference implementation to the Secret Test Net
 
 // Import the Secret Network client and wallet classes
 import { SecretNetworkClient, Wallet } from "secretjs";
-import * as dotenv from "dotenv";
 import * as fs from "fs";
 import { execSync } from "child_process";
 import * as path from "path";
+import { ADMIN_MNEMONIC } from "./config";
+import { updateConfig } from "./config-updater";
 
-// Load the environment variables
-dotenv.config();
-const admin_mnemonic = process.env.ADMIN_MNEMONIC;
-console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
+console.log("ADMIN_MNEMONIC: ", ADMIN_MNEMONIC);
 
 // Set the path to the contract binary
 const CONTRACT_BINARY_PATH = "../contract/snip721_reference.wasm.gz";
@@ -27,7 +25,7 @@ if (!fs.existsSync(contractDir)) {
 }
 
 // Create the admin wallet from the mnemonic
-const admin_wallet = new Wallet(admin_mnemonic);
+const admin_wallet = new Wallet(ADMIN_MNEMONIC);
 
 // Create the client for the Secret Network (Pulsar testnet)
 const admin_client = new SecretNetworkClient({
@@ -189,12 +187,18 @@ export const main = async (): Promise<void> => {
     // Upload the contract
     const result = await uploadContract(fs.readFileSync(CONTRACT_BINARY_PATH));
     
-    console.log("\n=== IMPORTANT: Save these values ===");
+    console.log("\n=== Contract uploaded successfully ===");
     console.log(`Code ID: ${result.code_id}`);
     console.log(`Code Hash: ${result.code_hash}`);
-    console.log("\nUpdate your .env file with:");
-    console.log(`SCT_CODE_ID="${result.code_id}"`);
-    console.log(`SCT_CODE_HASH="${result.code_hash}"`);
+    
+    // Automatically update config.ts
+    console.log("\nUpdating config.ts file...");
+    updateConfig([
+        { key: "SCT_CODE_ID", value: result.code_id },
+        { key: "SCT_CODE_HASH", value: result.code_hash! }
+    ]);
+    
+    console.log("\nThe config.ts has been updated with the new values!");
 };
 
 main(); 

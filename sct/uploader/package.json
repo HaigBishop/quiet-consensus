@@ -14,7 +14,6 @@
   "license": "ISC",
   "description": "SCT contract uploader and manager for Quiet Consensus",
   "dependencies": {
-    "dotenv": "^16.5.0",
     "secretjs": "^1.15.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

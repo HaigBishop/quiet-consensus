@@ -26,25 +26,6 @@ sct/
 └── minting_sct_nfts.md            # NFT minting guide
 ```
 
-## Quick Start
-
-1. **Setup Environment**
-   ```bash
-   cd uploader/
-   # Edit .env if needed
-   npm install
-   ```
-
-2. **Deploy Contract**
-   ```bash
-   npm run upload
-   npm run instantiate <code_id> <code_hash>
-   ```
-
-3. **Mint SCTs**
-   ```bash
-   npm run mint
-   ```
 
 ## Documentation
 

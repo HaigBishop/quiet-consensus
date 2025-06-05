@@ -5,12 +5,11 @@ Quiet Consensus is a totally anonymous polling platform made possible with Secre
 ### Key Features
 - **Perfectly anonymous polling**: Votes are completely private thanks to Secret Network
 - **Sybil resistance**: Only SCT (Soulbound Credential Token) holders can vote, ensuring one person = one vote
-- **Smooth frontend webpage**: Intuitive React interface with automated permit handling
+- **Smooth frontend**: Intuitive React interface with automated permit handling
 
 
 ## To Do
 - Add SCT Verification
-- Make all .env files config.ts
 
 ## Repository Structure
 
@@ -76,6 +75,27 @@ See `hosting_front_end.md` for clear instructions.
 
 1. Ensure the correct contract addresses are set in `web/src/config.ts`
 2. Run `npm install && npm run dev` in `web/` directory
+
+### All commands
+```bash
+cd Repos/quiet-consensus/sct/uploader/
+npm install
+npm run upload
+sleep 10
+npm run instantiate
+sleep 10
+npm run mint
+cd ~/Repos/quiet-consensus/poll/uploader
+npm install
+npm run upload
+sleep 10
+npm run instantiate
+cd ~/Repos/quiet-consensus/web/
+npm install
+npm run dev
+echo done!
+
+```
 
 
 

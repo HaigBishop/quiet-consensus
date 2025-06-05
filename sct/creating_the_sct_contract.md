@@ -14,14 +14,16 @@ This document describes the process of creating the soulbound credential token (
 5. Use the faucet: https://pulsar-3-faucet.vercel.app/
 
 
-### 2. Setting up the environment
+### 2. Setting up the configuration
 
-1. Update the `.env` file at `sct/uploader/.env` with your admin wallet mnemonic and address like:
+1. Update the `config.ts` file at `sct/uploader/src/config.ts` with your admin wallet mnemonic and address:
 
+   ```typescript
+    export const ADMIN_MNEMONIC = "stuff result visual zero coconut auction relax acquire divide soon link duck"; 
+    export const ADMIN_ADDRESS = "secret1ve9p7363enrj9v5f3fq428tqxvzl836wgrgk3w";
    ```
-   ADMIN_MNEMONIC="stuff result visual zero coconut auction relax acquire divide soon link duck"
-   ADMIN_ADDRESS="secret1ve9p7363enrj9v5f3fq428tqxvzl836wgrgk3w"
-   ```
+
+   **Note**: The provided `config.ts` file already contains test values for convenience. These are strictly for testnet usage only.
 
 
 ### 3. Installing dependencies
@@ -44,52 +46,22 @@ This will:
 - Build the contract using Docker
 - Upload it to the Secret Test Network
 - Display the Code ID and Code Hash
-
-Record the resulting Code ID and Code Hash. Update your `.env` file in `sct/uploader/` with these values:
-```
-SCT_CODE_ID="14544"
-SCT_CODE_HASH="773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
-```
-
-Update your `.env` file in `poll/uploader/`:
-
-```
-SCT_CODE_HASH="773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
-```
+- Automatically update your `config.ts` file with the new values
 
 ## Instantiating the SCT contract
 
 1. Make sure you're in `sct/uploader/`
-2. Ensure your `.env` file contains the `SCT_CODE_ID` and `SCT_CODE_HASH` values from the upload step
+2. Ensure your `config.ts` file contains the `SCT_CODE_ID` and `SCT_CODE_HASH` values from the upload step
 3. Run `npm run instantiate`
 
 This will:
-- Read the code ID and code hash from your `.env` file
+- Read the code ID and code hash from your `config.ts` file
 - Create a new instance of the SCT contract
 - Configure it as "SoulboundCredentialToken" with symbol "SCT"
 - Set your admin account as the contract admin
 - Display the contract address
-
-Record the resulting Contract address.
-
-Update your `.env` file in `sct/uploader/`:
-
-```
-SCT_CONTRACT_ADDRESS="secret13vvh7vhrkkwq7jj0xvcjujj0hz722074pt6mnm"
-```
-
-Update your `.env` file in `poll/uploader/`:
-
-```
-SCT_CODE_HASH="773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
-SCT_CONTRACT_ADDRESS="secret13vvh7vhrkkwq7jj0xvcjujj0hz722074pt6mnm"
-```
-
-Update your `config.ts` file in `web/src/`:
-
-```
-export const SCT_CONTRACT_ADDRESS = "secret13vvh7vhrkkwq7jj0xvcjujj0hz722074pt6mnm";
-```
+- Automatically update your `config.ts` file with the contract address
+- Also update the poll uploader's `config.ts` file with SCT values for cross-project usage
 
 
 ## Next Steps

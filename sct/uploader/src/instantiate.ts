@@ -7,20 +7,14 @@ This script instantiates an uploaded SCT (SNIP-721) contract on the Secret Test 
 
 // Import the Secret Network client and wallet classes
 import { SecretNetworkClient, Wallet } from "secretjs";
-import * as dotenv from "dotenv";
+import { ADMIN_MNEMONIC, ADMIN_ADDRESS, SCT_CODE_ID, SCT_CODE_HASH } from "./config";
+import { updateConfig, updatePollConfig } from "./config-updater";
 
-// Load the environment variables
-dotenv.config();
-const admin_mnemonic = process.env.ADMIN_MNEMONIC;
-const admin_address = process.env.ADMIN_ADDRESS;
-const sct_code_id = process.env.SCT_CODE_ID;
-const sct_code_hash = process.env.SCT_CODE_HASH;
-
-console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
-console.log("ADMIN_ADDRESS: ", admin_address);
+console.log("ADMIN_MNEMONIC: ", ADMIN_MNEMONIC);
+console.log("ADMIN_ADDRESS: ", ADMIN_ADDRESS);
 
 // Create the admin wallet from the mnemonic
-const admin_wallet = new Wallet(admin_mnemonic);
+const admin_wallet = new Wallet(ADMIN_MNEMONIC);
 
 // Create the Secret Network client for the Pulsar testnet
 const admin_client = new SecretNetworkClient({
@@ -44,7 +38,7 @@ const instantiateContract = async (codeId: string, contractCodeHash: string): Pr
         const initMsg = {
             name: "SoulboundCredentialToken",
             symbol: "SCT",
-            admin: admin_address,
+            admin: ADMIN_ADDRESS,
             entropy: entropy,
             config: {
                 public_total_supply: true,
@@ -100,26 +94,38 @@ const instantiateContract = async (codeId: string, contractCodeHash: string): Pr
 
 export const main = async (): Promise<void> => {
     // Check that required environment variables are set
-    if (!sct_code_id) {
-        console.error('SCT_CODE_ID environment variable is required!');
-        console.error('Update your .env file with the SCT_CODE_ID value from the upload step.');
+    if (!SCT_CODE_ID) {
+        console.error('SCT_CODE_ID is required!');
+        console.error('Run npm run upload first to set the SCT_CODE_ID value.');
         process.exit(1);
     }
     
-    if (!sct_code_hash) {
-        console.error('SCT_CODE_HASH environment variable is required!');
-        console.error('Update your .env file with the SCT_CODE_HASH value from the upload step.');
+    if (!SCT_CODE_HASH) {
+        console.error('SCT_CODE_HASH is required!');
+        console.error('Run npm run upload first to set the SCT_CODE_HASH value.');
         process.exit(1);
     }
 
-    // Instantiate the contract using values from environment variables
-    const contract_address = await instantiateContract(sct_code_id, sct_code_hash);
+    // Instantiate the contract using values from config.ts
+    const contract_address = await instantiateContract(SCT_CODE_ID, SCT_CODE_HASH);
     
-    // Print the contract address
-    console.log("\n=== IMPORTANT: Save this value ===");
+    console.log("\n=== Contract instantiated successfully ===");
     console.log(`Contract address: ${contract_address}`);
-    console.log("\nUpdate your .env file with:");
-    console.log(`SCT_CONTRACT_ADDRESS="${contract_address}"`);
+    
+    // Automatically update config.ts
+    console.log("\nUpdating config.ts file...");
+    updateConfig([
+        { key: "SCT_CONTRACT_ADDRESS", value: contract_address }
+    ]);
+    
+    // Also update the poll uploader config with both SCT values
+    console.log("\nUpdating poll uploader config.ts file...");
+    updatePollConfig([
+        { key: "SCT_CODE_HASH", value: SCT_CODE_HASH },
+        { key: "SCT_CONTRACT_ADDRESS", value: contract_address }
+    ]);
+    
+    console.log("\nThe config.ts files have been updated with the contract address!");
 };
 
 main(); 

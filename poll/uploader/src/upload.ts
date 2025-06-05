@@ -7,13 +7,13 @@ This script uploads the polling contract in `poll/contract/` to the Secret Test 
 
 // Import the Secret Network client and wallet classes
 import { SecretNetworkClient, Wallet } from "secretjs";
-import * as dotenv from "dotenv";
 import * as fs from "fs";
 import { validateWasm } from "./validate-wasm";
+import { ADMIN_MNEMONIC } from "./config";
+import { updateConfig } from "./config-updater";
 
-// Load the environment variables
-dotenv.config();
-const admin_mnemonic = process.env.ADMIN_MNEMONIC;
+// Load the configuration
+const admin_mnemonic = ADMIN_MNEMONIC;
 console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
 
 // Set the path to the contract binary
@@ -115,7 +115,18 @@ export const main = async (): Promise<void> => {
     }
     
     // Upload the contract
-    await uploadContract(fs.readFileSync(CONTRACT_BINARY_PATH));
+    const result = await uploadContract(fs.readFileSync(CONTRACT_BINARY_PATH));
+    
+    // Automatically update config.ts with the new values
+    updateConfig([
+        { key: "POLLING_CONTRACT_CODE_ID", value: result.code_id },
+        { key: "POLLING_CONTRACT_CODE_HASH", value: result.code_hash! }
+    ]);
+    
+    console.log("\n=== Contract Upload Complete ===");
+    console.log("✓ The config.ts has been updated with:");
+    console.log(`  POLLING_CONTRACT_CODE_ID="${result.code_id}"`);
+    console.log(`  POLLING_CONTRACT_CODE_HASH="${result.code_hash}"`);
 
 };
 

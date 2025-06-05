@@ -7,30 +7,27 @@ This script mints non-transferable SCT NFTs to user accounts on the Secret Test 
 
 // Import the Secret Network client and wallet classes
 import { SecretNetworkClient, Wallet } from "secretjs";
-import * as dotenv from "dotenv";
 import * as fs from "fs";
 import path from "path";
+import { 
+    ADMIN_MNEMONIC, 
+    SCT_CONTRACT_ADDRESS, 
+    SCT_CODE_HASH,
+    USER1_ADDRESS,
+    USER1_MNEMONIC,
+    USER2_ADDRESS,
+    USER2_MNEMONIC,
+    USER3_ADDRESS,
+    USER3_MNEMONIC
+} from "./config";
+import { updateConfig } from "./config-updater";
 
-// Load the environment variables
-dotenv.config();
-const admin_mnemonic = process.env.ADMIN_MNEMONIC;
-const sct_contract_address = process.env.SCT_CONTRACT_ADDRESS;
-const sct_code_hash = process.env.SCT_CODE_HASH;
-
-// User addresses and mnemonics from environment
-const user1_address = process.env.USER1_ADDRESS;
-const user1_mnemonic = process.env.USER1_MNEMONIC;
-const user2_address = process.env.USER2_ADDRESS;
-const user2_mnemonic = process.env.USER2_MNEMONIC;
-const user3_address = process.env.USER3_ADDRESS;
-const user3_mnemonic = process.env.USER3_MNEMONIC;
-
-console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
-console.log("SCT_CONTRACT_ADDRESS: ", sct_contract_address);
-console.log("SCT_CODE_HASH: ", sct_code_hash);
+console.log("ADMIN_MNEMONIC: ", ADMIN_MNEMONIC);
+console.log("SCT_CONTRACT_ADDRESS: ", SCT_CONTRACT_ADDRESS);
+console.log("SCT_CODE_HASH: ", SCT_CODE_HASH);
 
 // Create the admin wallet from the mnemonic
-const admin_wallet = new Wallet(admin_mnemonic);
+const admin_wallet = new Wallet(ADMIN_MNEMONIC);
 
 // Create the client for the Secret Network (Pulsar testnet)
 const admin_client = new SecretNetworkClient({
@@ -60,8 +57,8 @@ const mintNFT = async (ownerAddress: string, userName: string): Promise<void> =>
         const tx = await admin_client.tx.compute.executeContract(
             {
                 sender: admin_wallet.address,
-                contract_address: sct_contract_address!,
-                code_hash: sct_code_hash!,
+                contract_address: SCT_CONTRACT_ADDRESS,
+                code_hash: SCT_CODE_HASH,
                 msg: mintMsg,
             },
             {
@@ -114,8 +111,8 @@ const createViewingKey = async (userWallet: Wallet, userClient: SecretNetworkCli
         const tx = await userClient.tx.compute.executeContract(
             {
                 sender: userWallet.address,
-                contract_address: sct_contract_address!,
-                code_hash: sct_code_hash!,
+                contract_address: SCT_CONTRACT_ADDRESS,
+                code_hash: SCT_CODE_HASH,
                 msg: setViewingKeyMsg,
             },
             {
@@ -154,8 +151,8 @@ const checkNFTOwnership = async (userAddress: string, viewingKey: string, userNa
         };
         
         const response = await admin_client.query.compute.queryContract({
-            contract_address: sct_contract_address!,
-            code_hash: sct_code_hash!,
+            contract_address: SCT_CONTRACT_ADDRESS,
+            code_hash: SCT_CODE_HASH,
             query: query,
         });
         
@@ -202,20 +199,20 @@ const checkNFTOwnership = async (userAddress: string, viewingKey: string, userNa
 };
 
 export const main = async (): Promise<void> => {
-    // Check if required environment variables are set
-    if (!sct_contract_address || !sct_code_hash) {
-        console.error("Error: SCT_CONTRACT_ADDRESS and SCT_CODE_HASH must be set in .env file");
+    // Check if required configuration values are set
+    if (!SCT_CONTRACT_ADDRESS || !SCT_CODE_HASH) {
+        console.error("Error: SCT_CONTRACT_ADDRESS and SCT_CODE_HASH must be set in config.ts file");
         console.error("Please run 'npm run upload' and 'npm run instantiate' first");
         process.exit(1);
     }
     
-    if (!user1_address || !user2_address || !user3_address) {
-        console.error("Error: User addresses must be set in .env file");
+    if (!USER1_ADDRESS || !USER2_ADDRESS || !USER3_ADDRESS) {
+        console.error("Error: User addresses must be set in config.ts file");
         process.exit(1);
     }
 
-    if (!user1_mnemonic || !user2_mnemonic || !user3_mnemonic) {
-        console.error("Error: User mnemonics must be set in .env file");
+    if (!USER1_MNEMONIC || !USER2_MNEMONIC || !USER3_MNEMONIC) {
+        console.error("Error: User mnemonics must be set in config.ts file");
         process.exit(1);
     }
     
@@ -224,9 +221,9 @@ export const main = async (): Promise<void> => {
     
     try {
         // Mint NFTs to all three users
-        await mintNFT(user1_address, "Quiet Consensus User 1");
-        await mintNFT(user2_address, "Quiet Consensus User 2");
-        await mintNFT(user3_address, "Quiet Consensus User 3");
+        await mintNFT(USER1_ADDRESS, "Quiet Consensus User 1");
+        await mintNFT(USER2_ADDRESS, "Quiet Consensus User 2");
+        await mintNFT(USER3_ADDRESS, "Quiet Consensus User 3");
         
         console.log("\nAll SCT NFTs minted successfully!");
         console.log("\nEach user now has a non-transferable (soulbound) SCT NFT.");
@@ -236,7 +233,7 @@ export const main = async (): Promise<void> => {
         console.log("\n\n=== Creating Viewing Keys and Verifying Ownership ===");
         
         // Create user wallets and clients
-        const user1_wallet = new Wallet(user1_mnemonic);
+        const user1_wallet = new Wallet(USER1_MNEMONIC);
         const user1_client = new SecretNetworkClient({
             chainId: "pulsar-3",
             url: "https://pulsar.lcd.secretnodes.com",
@@ -244,7 +241,7 @@ export const main = async (): Promise<void> => {
             walletAddress: user1_wallet.address,
         });
         
-        const user2_wallet = new Wallet(user2_mnemonic);
+        const user2_wallet = new Wallet(USER2_MNEMONIC);
         const user2_client = new SecretNetworkClient({
             chainId: "pulsar-3",
             url: "https://pulsar.lcd.secretnodes.com",
@@ -252,7 +249,7 @@ export const main = async (): Promise<void> => {
             walletAddress: user2_wallet.address,
         });
         
-        const user3_wallet = new Wallet(user3_mnemonic);
+        const user3_wallet = new Wallet(USER3_MNEMONIC);
         const user3_client = new SecretNetworkClient({
             chainId: "pulsar-3",
             url: "https://pulsar.lcd.secretnodes.com",
@@ -270,9 +267,9 @@ export const main = async (): Promise<void> => {
         await new Promise(resolve => setTimeout(resolve, 10000));
         
         // Check NFT ownership for each user
-        await checkNFTOwnership(user1_address, user1_viewing_key, "Quiet Consensus User 1");
-        await checkNFTOwnership(user2_address, user2_viewing_key, "Quiet Consensus User 2");
-        await checkNFTOwnership(user3_address, user3_viewing_key, "Quiet Consensus User 3");
+        await checkNFTOwnership(USER1_ADDRESS, user1_viewing_key, "Quiet Consensus User 1");
+        await checkNFTOwnership(USER2_ADDRESS, user2_viewing_key, "Quiet Consensus User 2");
+        await checkNFTOwnership(USER3_ADDRESS, user3_viewing_key, "Quiet Consensus User 3");
         
         console.log("\nSCT minting and verification process completed!");
         console.log("\n=== Viewing Keys ===");
@@ -280,6 +277,16 @@ export const main = async (): Promise<void> => {
         console.log(`User 2 viewing key: ${user2_viewing_key}`);
         console.log(`User 3 viewing key: ${user3_viewing_key}`);
         console.log("\nAll transaction logs and ownership info saved to logs/ directory");
+        
+        // Automatically update config.ts with viewing keys
+        console.log("\nUpdating config.ts with viewing keys...");
+        updateConfig([
+            { key: "USER1_VIEWING_KEY", value: user1_viewing_key },
+            { key: "USER2_VIEWING_KEY", value: user2_viewing_key },
+            { key: "USER3_VIEWING_KEY", value: user3_viewing_key }
+        ]);
+        
+        console.log("\nThe config.ts has been updated with the viewing keys!");
         
     } catch (error) {
         console.error("\nMinting process failed:", error);
