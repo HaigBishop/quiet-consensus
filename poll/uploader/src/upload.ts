@@ -16,7 +16,7 @@ const admin_mnemonic = process.env.ADMIN_MNEMONIC;
 console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
 
 // Set the path to the contract binary
-const CONTRACT_BINARY_PATH = "../contract/optimized-wasm/poll.wasm.gz";
+const CONTRACT_BINARY_PATH = "../contract/contract.wasm.gz";
 
 // Create the admin wallet from the mnemonic
 const admin_wallet = new Wallet(admin_mnemonic);
@@ -49,12 +49,29 @@ const uploadContract = async (contract_wasm: Buffer): Promise<{code_id: string, 
             }
         );
 
+        // Debug: Log the full transaction response
+        console.log("Transaction response:", JSON.stringify(tx, null, 2));
+        console.log("Transaction arrayLog:", JSON.stringify(tx.arrayLog, null, 2));
+
         // Extract the code ID from the transaction logs
         const codeIdLog = tx.arrayLog?.find(
             (log) => log.type === "message" && log.key === "code_id"
         );
         
         if (!codeIdLog) {
+            // Try alternative methods to find code_id
+            console.log("Looking for code_id in alternative locations...");
+            
+            // Check if it's in the events
+            if (tx.events) {
+                console.log("Transaction events:", JSON.stringify(tx.events, null, 2));
+            }
+            
+            // Check if it's in rawLog
+            if (tx.rawLog) {
+                console.log("Raw log:", tx.rawLog);
+            }
+            
             throw new Error("Failed to find code_id in transaction logs");
         }
         

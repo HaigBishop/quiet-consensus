@@ -55,7 +55,11 @@ The polling contract needs to be able to communicate with the SCT contract, so w
    - options
 - Making poll fails gracefully if:
    - The resulting poll_id already taken (same title+options)
-   - Invalid poll contents (empty title, >8 options, etc.)
+   - Invalid poll contents 
+     - <2 options or >8 options
+     - empty title or description
+     - title length > 100 chars
+     - description length > 500 chars
    - Not enough gas/fees
    - etc.
 - If making a poll succeeds we:
@@ -85,6 +89,7 @@ The polling contract needs to be able to communicate with the SCT contract, so w
 - This is able to be used by anyone
 - Arguments:
    - poll_id
+   - also uses sender's address
 - Getting vote fails gracefully if:
    - poll_id is invalid
    - the sender is not legit

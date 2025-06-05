@@ -6,9 +6,9 @@ This document describes the process of creating the Quiet Consensus polling cont
 ### Compiling the polling contract
 
 1. Move to `poll/contract/`
-2. Compile it by running `make build-reproducible`
+2. Compile it by running `make build-mainnet`
 
-This results in `poll/contract/optimized-wasm/poll.wasm.gz`
+This results in `poll/contract/contract.wasm.gz`
 
 
 

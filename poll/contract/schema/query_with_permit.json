@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QueryWithPermit",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "get_my_vote"
+      ],
+      "properties": {
+        "get_my_vote": {
+          "type": "object",
+          "required": [
+            "poll_id"
+          ],
+          "properties": {
+            "poll_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

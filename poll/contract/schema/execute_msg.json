@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ExecuteMsg",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "make_poll"
+      ],
+      "properties": {
+        "make_poll": {
+          "type": "object",
+          "required": [
+            "description",
+            "options",
+            "title"
+          ],
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "title": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "cast_vote"
+      ],
+      "properties": {
+        "cast_vote": {
+          "type": "object",
+          "required": [
+            "option_idx",
+            "poll_id"
+          ],
+          "properties": {
+            "option_idx": {
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0.0
+            },
+            "poll_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}
