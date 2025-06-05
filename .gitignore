@@ -5,3 +5,7 @@ node_modules
 sct-old
 Cargo.lock
 tutorial.md
+optimized-wasm
+artifacts
+poll/uploader/dist
+test-compile.ts

@@ -43,6 +43,7 @@ exports.main = void 0;
 const secretjs_1 = require("secretjs");
 const dotenv = __importStar(require("dotenv"));
 const fs = __importStar(require("fs"));
+const validate_wasm_1 = require("./validate-wasm");
 // Load the environment variables
 dotenv.config();
 const admin_mnemonic = process.env.ADMIN_MNEMONIC;
@@ -71,6 +72,12 @@ const uploadContract = async (contract_wasm) => {
         }, {
             gasLimit: 1_500_000,
         });
+        // Check if transaction failed
+        if (tx.code !== 0) {
+            console.error("Transaction failed with code:", tx.code);
+            console.error("Error message:", tx.rawLog);
+            throw new Error(`Transaction failed: ${tx.rawLog}`);
+        }
         // Debug: Log the full transaction response
         console.log("Transaction response:", JSON.stringify(tx, null, 2));
         console.log("Transaction arrayLog:", JSON.stringify(tx.arrayLog, null, 2));
@@ -107,6 +114,12 @@ const uploadContract = async (contract_wasm) => {
     }
 };
 const main = async () => {
+    // Validate WASM before uploading
+    const isValid = await (0, validate_wasm_1.validateWasm)();
+    if (!isValid) {
+        console.error("❌ WASM validation failed. Aborting upload.");
+        process.exit(1);
+    }
     // Upload the contract
     await uploadContract(fs.readFileSync(CONTRACT_BINARY_PATH));
 };

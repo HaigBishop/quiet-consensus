@@ -9,6 +9,7 @@ This script uploads the polling contract in `poll/contract/` to the Secret Test 
 import { SecretNetworkClient, Wallet } from "secretjs";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
+import { validateWasm } from "./validate-wasm";
 
 // Load the environment variables
 dotenv.config();
@@ -48,6 +49,13 @@ const uploadContract = async (contract_wasm: Buffer): Promise<{code_id: string, 
                 gasLimit: 1_500_000,
             }
         );
+
+        // Check if transaction failed
+        if (tx.code !== 0) {
+            console.error("Transaction failed with code:", tx.code);
+            console.error("Error message:", tx.rawLog);
+            throw new Error(`Transaction failed: ${tx.rawLog}`);
+        }
 
         // Debug: Log the full transaction response
         console.log("Transaction response:", JSON.stringify(tx, null, 2));
@@ -99,6 +107,13 @@ const uploadContract = async (contract_wasm: Buffer): Promise<{code_id: string, 
 };
 
 export const main = async (): Promise<void> => {
+    // Validate WASM before uploading
+    const isValid = await validateWasm();
+    if (!isValid) {
+        console.error("❌ WASM validation failed. Aborting upload.");
+        process.exit(1);
+    }
+    
     // Upload the contract
     await uploadContract(fs.readFileSync(CONTRACT_BINARY_PATH));
 

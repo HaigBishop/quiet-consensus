@@ -12,7 +12,7 @@ import { QueryError, WalletError } from "./SecretJsErrors";
 import type { Permit } from "secretjs";
 
 const contractCodeHash = import.meta.env.POLLING_CONTRACT_CODE_HASH;
-const contractAddress = import.meta.env.POLLING_CONTRACT_ADDR;
+const contractAddress = import.meta.env.POLLING_CONTRACT_ADDRESS;
 
 type AuctionInfo = {
     auction_info: {

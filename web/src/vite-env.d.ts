@@ -16,7 +16,7 @@ declare global {
 }
 
 interface ImportMetaEnv {
-    readonly POLLING_CONTRACT_ADDR: string;
+    readonly POLLING_CONTRACT_ADDRESS: string;
     readonly POLLING_CONTRACT_CODE_HASH: string;
 }
   

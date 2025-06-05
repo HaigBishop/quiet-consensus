@@ -12,7 +12,44 @@ import * as dotenv from "dotenv";
 // Load the environment variables
 dotenv.config();
 const admin_mnemonic = process.env.ADMIN_MNEMONIC;
+const code_id = process.env.POLLING_CONTRACT_CODE_ID;
+const code_hash = process.env.POLLING_CONTRACT_CODE_HASH;
+const sct_contract_address = process.env.SCT_CONTRACT_ADDRESS;
+const sct_code_hash = process.env.SCT_CODE_HASH;
+
 console.log("ADMIN_MNEMONIC: ", admin_mnemonic);
+console.log("POLLING_CONTRACT_CODE_ID: ", code_id);
+console.log("POLLING_CONTRACT_CODE_HASH: ", code_hash);
+console.log("SCT_CONTRACT_ADDRESS: ", sct_contract_address);
+console.log("SCT_CODE_HASH: ", sct_code_hash);
+
+// Validate required environment variables
+if (!admin_mnemonic) {
+    console.error("Error: ADMIN_MNEMONIC is required in .env file");
+    process.exit(1);
+}
+
+if (!code_id) {
+    console.error("Error: POLLING_CONTRACT_CODE_ID is required in .env file");
+    process.exit(1);
+}
+
+if (!code_hash) {
+    console.error("Error: POLLING_CONTRACT_CODE_HASH is required in .env file");
+    process.exit(1);
+}
+
+if (!sct_contract_address) {
+    console.error("Error: SCT_CONTRACT_ADDRESS is required in .env file");
+    console.error("You need to deploy an SCT contract first. See: ../sct/creating_the_sct_contract.md");
+    process.exit(1);
+}
+
+if (!sct_code_hash) {
+    console.error("Error: SCT_CODE_HASH is required in .env file");
+    console.error("You need to deploy an SCT contract first. See: ../sct/creating_the_sct_contract.md");
+    process.exit(1);
+}
 
 // Create the admin wallet from the mnemonic
 const admin_wallet = new Wallet(admin_mnemonic);
@@ -32,11 +69,14 @@ const instantiateContract = async (codeId: string, contractCodeHash: string): Pr
         console.log(`Code ID: ${codeId}`);
         console.log(`Code hash: ${contractCodeHash}`);
         
-        // Create instantiation message (empty for this contract)
-        const initMsg = {};
+        // Create instantiation message with SCT contract details
+        const initMsg = {
+            sct_contract_address: sct_contract_address,
+            sct_code_hash: sct_code_hash
+        };
         
         // Generate a unique label for the contract instance
-        const label = "test contract" + Math.ceil(Math.random() * 10_000_000);
+        const label = "QuietConsensusPollingContract_" + Math.ceil(Math.random() * 10_000_000);
         console.log(`Contract label: ${label}`);
         
         // Instantiate the contract on the blockchain
@@ -53,10 +93,37 @@ const instantiateContract = async (codeId: string, contractCodeHash: string): Pr
             }
         );
         
+        // Check if transaction was successful
+        if (tx.code !== 0) {
+            throw new Error(`Transaction failed with code ${tx.code}: ${tx.rawLog}`);
+        }
+        
         // Extract the contract address from the transaction logs
-        const contractAddressLog = tx.arrayLog?.find(
+        // Try multiple possible log structures
+        let contractAddressLog = tx.arrayLog?.find(
             (log) => log.type === "message" && log.key === "contract_address"
         );
+        
+        // Alternative: look for wasm events
+        if (!contractAddressLog) {
+            contractAddressLog = tx.arrayLog?.find(
+                (log) => log.type === "wasm" && log.key === "contract_address"
+            );
+        }
+        
+        // Alternative: look for instantiate events
+        if (!contractAddressLog) {
+            contractAddressLog = tx.arrayLog?.find(
+                (log) => log.type === "instantiate" && log.key === "contract_address"
+            );
+        }
+        
+        // Alternative: look for any log with contract_address key
+        if (!contractAddressLog) {
+            contractAddressLog = tx.arrayLog?.find(
+                (log) => log.key === "contract_address"
+            );
+        }
         
         if (!contractAddressLog) {
             throw new Error("Failed to find contract_address in transaction logs");
@@ -75,23 +142,15 @@ const instantiateContract = async (codeId: string, contractCodeHash: string): Pr
 };
 
 export const main = async (): Promise<void> => {
-    // The expected command is:
-    // npm run instantiate <code_id> <code_hash>
-    if (process.argv.length !== 4) {
-        console.error('Expected two arguments!');
-        console.error('Usage: node instantiate.ts <code_id> <code_hash>');
-        process.exit(1);
-    }
-
-    // Extract the code_id and code_hash from the command line arguments
-    let code_id = process.argv[2];
-    let code_hash = process.argv[3];
-
-    // Instantiate the contract
-    const contract_address = await instantiateContract(code_id, code_hash);
+    // Instantiate the contract using values from environment variables
+    const contract_address = await instantiateContract(code_id!, code_hash!);
     
-    // Print the contract address
-    console.log("Contract address: ", contract_address);
+    // Print the contract address for easy copying
+    console.log("\n=== IMPORTANT: Save this value ===");
+    console.log(`Contract address: ${contract_address}`);
+    console.log("\nUpdate your frontend .env file with:");
+    console.log(`POLLING_CONTRACT_ADDRESS="${contract_address}"`);
+    console.log(`POLLING_CONTRACT_CODE_HASH="${code_hash}"`);
 };
 
 main();

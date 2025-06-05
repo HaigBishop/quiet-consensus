@@ -5,8 +5,9 @@
   "scripts": {
     "clean:dist": "rimraf ./dist",
     "build": "npm run clean:dist && tsc",
-    "upload": "npm run build && node dist/src/upload",
-    "instantiate": "npm run build && node dist/src/instantiate"
+    "validate": "npm run build && node dist/validate-wasm",
+    "upload": "npm run build && node dist/upload",
+    "instantiate": "npm run build && node dist/instantiate"
   },
   "keywords": [],
   "author": "",
