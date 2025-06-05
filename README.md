@@ -11,6 +11,8 @@ Quiet Consensus is a totally anonymous polling platform made possible with Secre
 ## To Do
 - Add SCT Verification
 
+
+
 ## Repository Structure
 
 The Quiet Consensus repository consists of multiple stand-alone sub components
@@ -76,7 +78,9 @@ See `hosting_front_end.md` for clear instructions.
 1. Ensure the correct contract addresses are set in `web/src/config.ts`
 2. Run `npm install && npm run dev` in `web/` directory
 
-### All commands
+### Quick workflow
+If you know what you're doing, running all of these commands (or some variation) at once will deploy all components in the correct order connecting everything together perfectly.
+
 ```bash
 cd Repos/quiet-consensus/sct/uploader/
 npm install
