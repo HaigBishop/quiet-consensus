@@ -8,7 +8,9 @@ Quiet Consensus is a totally anonymous polling platform made possible with Secre
 - **Smooth frontend webpage**: Intuitive React interface with automated permit handling
 
 
-
+## To Do
+- Add SCT Verification
+- Make all .env files config.ts
 
 ## Repository Structure
 
