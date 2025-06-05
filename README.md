@@ -1,27 +1,20 @@
 # quiet-consensus
 
+Quiet Consensus is a totally anonymous polling platform made possible with Secret Network. It also only allows voting by individuals that hold a Soulbound Credential Token (SCT), ensuring that every vote originates from a single person, and no single person can vote multiple times. Quiet Consensus is accessible via a webpage and by using the Keplr wallet.
+
+### Key Features
+- Perfectly anonymous polling
+- Sybil resistance
+- Smooth frontend webpage
+
+
 ## To Do
 - Finish the polling contract (SCT contract connection)
 
 
-
-### Frontend-Blockchain Linking: 
-
-- Submit new poll to blockchain
-   - Actually submits new poll
-   - Could refresh polls until we see it (make UPDATE_REFRESH_FREQUENCY and UPDATE_REFRESH_TIMEOUT)
-- Submit vote to blockchain
-   - Actually submits vote
-   - Could refresh polls until we see it (make UPDATE_REFRESH_FREQUENCY and UPDATE_REFRESH_TIMEOUT)
-- Fetch states of polls from blockchain 
-   - Actually fetches polls -> PollStore
-   - Remove example initialisation of polls (or comment out?)
-   - Fetch at start-up then regularly (make REFRESH_POLLS_EVERY)
-
-
-
-
 ## Repository Structure
+
+The Quiet Consensus repository consists of multiple stand-alone sub components
 
 ### Structure
 ```
@@ -55,9 +48,7 @@ quiet-consensus/
 
 
 
-
-
-## Links
+## Relevant Links
 
 ### dApp Tutorial
 

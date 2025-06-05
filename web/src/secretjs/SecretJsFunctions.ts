@@ -134,17 +134,34 @@ const SecretJsFunctions = () => {
         }
 
         // Convert contract poll format to frontend Poll type
-        return result.get_polls.polls.map(poll => ({
-            pollId: poll.poll_id,
-            title: poll.title,
-            description: poll.description,
-            createdAt: new Date(poll.created_at.seconds * 1000), // Convert seconds to milliseconds
-            options: poll.options.map((text, index) => ({
-                optionId: `opt-${index}`,
-                text
-            })),
-            tally: poll.tally
-        }));
+        return result.get_polls.polls.map(poll => {
+            let createdAt: Date;
+            
+            // Handle different timestamp formats
+            if (typeof poll.created_at === 'number') {
+                // If it's a number, assume it's nanoseconds since epoch
+                createdAt = new Date(poll.created_at / 1_000_000); // Convert nanoseconds to milliseconds
+            } else if (poll.created_at && typeof poll.created_at === 'object' && 'seconds' in poll.created_at) {
+                // If it's an object with seconds property
+                createdAt = new Date(poll.created_at.seconds * 1000);
+            } else {
+                // Fallback
+                console.warn('Unknown timestamp format:', poll.created_at);
+                createdAt = new Date(); // Use current time as fallback
+            }
+            
+            return {
+                pollId: poll.poll_id,
+                title: poll.title,
+                description: poll.description,
+                createdAt,
+                options: poll.options.map((text, index) => ({
+                    optionId: `opt-${index}`,
+                    text
+                })),
+                tally: poll.tally
+            };
+        });
     };
 
     // Query: Get number of polls
