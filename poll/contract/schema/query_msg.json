@@ -29,30 +29,6 @@
     {
       "type": "object",
       "required": [
-        "debug_polling_smart_contract"
-      ],
-      "properties": {
-        "debug_polling_smart_contract": {
-          "type": "object",
-          "required": [
-            "address",
-            "sct_viewing_key"
-          ],
-          "properties": {
-            "address": {
-              "type": "string"
-            },
-            "sct_viewing_key": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "type": "object",
-      "required": [
         "with_permit"
       ],
       "properties": {

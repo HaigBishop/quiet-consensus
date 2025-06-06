@@ -75,9 +75,10 @@ See `hosting_front_end.md` for clear instructions.
 2. Run `npm install && npm run dev` in `web/` directory
 
 ### Quick workflow
-If you know what you're doing, running all of these commands (or some variation) at once will deploy all components in the correct order connecting everything together perfectly.
+Running all of these commands at once *should* deploy all the components in the correct order connecting everything together perfectly.
 
 ```bash
+# SCT Contract ---
 cd ~/Repos/quiet-consensus/sct/uploader/
 npm install
 npm run upload
@@ -85,6 +86,7 @@ sleep 10
 npm run instantiate
 sleep 10
 npm run mint
+# Polling Contract ---
 cd ~/Repos/quiet-consensus/poll/contract
 make build-mainnet-reproducible
 cd ~/Repos/quiet-consensus/poll/uploader
@@ -92,10 +94,10 @@ npm install
 npm run upload
 sleep 10
 npm run instantiate
+# Front End ---
 cd ~/Repos/quiet-consensus/web/
 npm install
 npm run dev
-echo done!
 
 ```
 
