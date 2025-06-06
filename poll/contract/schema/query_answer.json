@@ -68,9 +68,66 @@
         }
       },
       "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "debug_polling_smart_contract"
+      ],
+      "properties": {
+        "debug_polling_smart_contract": {
+          "type": "object",
+          "required": [
+            "debug_info"
+          ],
+          "properties": {
+            "debug_info": {
+              "$ref": "#/definitions/DebugInfo"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
     }
   ],
   "definitions": {
+    "DebugInfo": {
+      "type": "object",
+      "required": [
+        "address",
+        "has_sct",
+        "query_result",
+        "query_sent",
+        "sct_code_hash",
+        "sct_contract_address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "error_message": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "has_sct": {
+          "type": "boolean"
+        },
+        "query_result": {
+          "type": "string"
+        },
+        "query_sent": {
+          "type": "string"
+        },
+        "sct_code_hash": {
+          "type": "string"
+        },
+        "sct_contract_address": {
+          "type": "string"
+        }
+      }
+    },
     "Poll": {
       "type": "object",
       "required": [

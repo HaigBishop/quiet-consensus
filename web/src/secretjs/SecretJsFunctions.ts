@@ -97,6 +97,19 @@ const SecretJsFunctions = () => {
     ): Promise<void> => {
         if (!secretJs || !secretAddress) throw new WalletError("no wallet connected");
 
+        // Get SCT viewing key
+        const storageKey = `${secretAddress}:${SCT_CONTRACT_ADDRESS}:sctViewingKey`;
+        let sctViewingKey = localStorage.getItem(storageKey);
+        
+        if (!sctViewingKey) {
+            // Create a new viewing key if none exists
+            sctViewingKey = await createSCTViewingKey();
+            localStorage.setItem(storageKey, sctViewingKey);
+            
+            // Wait a moment for the viewing key to be processed
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+
         const castVoteMsg = {
             sender: secretAddress,
             contract_address: contractAddress,
@@ -104,7 +117,8 @@ const SecretJsFunctions = () => {
             msg: {
                 cast_vote: {
                     poll_id: pollId,
-                    option_idx: optionIdx
+                    option_idx: optionIdx,
+                    sct_viewing_key: sctViewingKey
                 }
             }
         };

@@ -43,7 +43,8 @@
           "type": "object",
           "required": [
             "option_idx",
-            "poll_id"
+            "poll_id",
+            "sct_viewing_key"
           ],
           "properties": {
             "option_idx": {
@@ -52,6 +53,9 @@
               "minimum": 0.0
             },
             "poll_id": {
+              "type": "string"
+            },
+            "sct_viewing_key": {
               "type": "string"
             }
           }

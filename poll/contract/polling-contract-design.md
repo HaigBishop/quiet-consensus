@@ -74,10 +74,12 @@ The polling contract needs to be able to communicate with the SCT contract, so w
 - Arguments:
    - poll_id
    - option_idx
+   - sct_viewing_key
 - Making poll fails gracefully if:
-   - Caller does not hold a SCT
+   - Caller does not hold a SCT (verified via SCT contract query using viewing key)
    - option_idx or poll_id is invalid
    - Have not already voted
+   - Invalid viewing key
    - Not enough gas/fees
    - etc.
 - If making a poll succeeds we:

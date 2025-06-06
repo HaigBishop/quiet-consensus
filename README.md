@@ -8,10 +8,6 @@ Quiet Consensus is a totally anonymous polling platform made possible with Secre
 - **Smooth frontend**: Intuitive React interface with automated permit handling
 
 
-## To Do
-- Add SCT Verification in polling contract
-
-
 
 ## Repository Structure
 
@@ -82,13 +78,15 @@ See `hosting_front_end.md` for clear instructions.
 If you know what you're doing, running all of these commands (or some variation) at once will deploy all components in the correct order connecting everything together perfectly.
 
 ```bash
-cd Repos/quiet-consensus/sct/uploader/
+cd ~/Repos/quiet-consensus/sct/uploader/
 npm install
 npm run upload
 sleep 10
 npm run instantiate
 sleep 10
 npm run mint
+cd ~/Repos/quiet-consensus/poll/contract
+make build-mainnet-reproducible
 cd ~/Repos/quiet-consensus/poll/uploader
 npm install
 npm run upload

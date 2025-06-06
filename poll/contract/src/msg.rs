@@ -34,6 +34,7 @@ pub enum ExecuteMsg {
     CastVote {
         poll_id: String,
         option_idx: u32,
+        sct_viewing_key: String,
     },
 }
 

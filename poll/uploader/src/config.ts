@@ -11,10 +11,10 @@ export const ADMIN_MNEMONIC = "stuff result visual zero coconut auction relax ac
 
 
 // Polling contract details
-export const POLLING_CONTRACT_CODE_ID = "14582";
-export const POLLING_CONTRACT_CODE_HASH = "ae27de1ca2c38f9664a94898cdb7226ac6650798c55e86279a84a7a13ea187f5";
+export const POLLING_CONTRACT_CODE_ID = "14607";
+export const POLLING_CONTRACT_CODE_HASH = "5e1bb72cab1ebe02ab27707fa06c5aec652592719bff99bb0c0c06d282af34c0";
 
 
 // SCT (Soulbound Credential Token) contract details
 export const SCT_CODE_HASH = "773c39a4b75d87c4d04b6cfe16d32cd5136271447e231b342f7467177c363ca8"
-export const SCT_CONTRACT_ADDRESS = "secret1v0hea4vcxjqxzyj5p2076xuanhrawm74wmkwvd"
+export const SCT_CONTRACT_ADDRESS = "secret1m4tm29glky3c890uy8j9mufgf3e7aagghkzmvn"

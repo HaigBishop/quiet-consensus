@@ -8,8 +8,9 @@ See `polling-contract-design.md` for more details.
 
 // Imports
 use cosmwasm_std::{
-    entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, StdError, CanonicalAddr, to_binary,
+    entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult, StdError, CanonicalAddr, to_binary, WasmQuery, QueryRequest,
 };
+use serde::{Deserialize, Serialize};
 use secret_toolkit::permit::Permit;
 use crate::msg::{InstantiateMsg, ExecuteMsg, QueryMsg, QueryWithPermit, QueryAnswer};
 use crate::state::{SCT_CONTRACT_ADDRESS, SCT_CODE_HASH, POLL_COUNT, POLLS, VOTES, Poll};
@@ -68,8 +69,8 @@ pub fn execute(deps: DepsMut, env: Env, info: MessageInfo, msg: ExecuteMsg) -> S
         }
         // Cast vote 
         // (only SCT holders)
-        ExecuteMsg::CastVote { poll_id, option_idx } => {
-            try_cast_vote(deps, info, poll_id, option_idx)
+        ExecuteMsg::CastVote { poll_id, option_idx, sct_viewing_key } => {
+            try_cast_vote(deps, info, poll_id, option_idx, sct_viewing_key)
         }
     }
 }
@@ -118,13 +119,24 @@ pub fn try_cast_vote(
     info: MessageInfo,
     poll_id: String,
     option_idx: u32,
+    sct_viewing_key: String,
 ) -> StdResult<Response> {
     
     let sender_canonical = deps.api.addr_canonicalize(info.sender.as_str())?;
     
     // Check if user owns an SCT
-    if !address_owns_sct(deps.as_ref(), &sender_canonical)? {
-        return Err(StdError::generic_err("You must own an SCT to vote"));
+    match address_owns_sct(deps.as_ref(), &sender_canonical, &sct_viewing_key) {
+        Ok(true) => {
+            // User has SCT, continue with voting
+        }
+        Ok(false) => {
+            // This case should not happen with the new implementation
+            return Err(StdError::generic_err("SCT check returned false unexpectedly"));
+        }
+        Err(e) => {
+            // User doesn't have SCT or query failed
+            return Err(e);
+        }
     }
     
     // Validate the vote
@@ -260,16 +272,75 @@ fn generate_poll_id(title: &str, options: &[String]) -> String {
     hex::encode(result)
 }
 
+// SNIP-721 query structures
+#[derive(Serialize, Deserialize)]
+struct TokensQuery {
+    tokens: TokensQueryParams,
+}
+
+#[derive(Serialize, Deserialize)]
+struct TokensQueryParams {
+    owner: String,
+    viewing_key: String,
+    limit: Option<u32>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct TokensResponse {
+    token_list: TokenList,
+}
+
+#[derive(Serialize, Deserialize)]
+struct TokenList {
+    tokens: Vec<String>,
+}
+
 // Helper function to check if an SCT is owned by the given address
 fn address_owns_sct(
     deps: Deps,
-    _address: &CanonicalAddr,
+    address: &CanonicalAddr,
+    viewing_key: &str,
 ) -> StdResult<bool> {
-    let _sct_contract_address = SCT_CONTRACT_ADDRESS.load(deps.storage)?;
-    let _sct_code_hash = SCT_CODE_HASH.load(deps.storage)?;
+    let sct_contract_address = SCT_CONTRACT_ADDRESS.load(deps.storage)?;
+    let sct_code_hash = SCT_CODE_HASH.load(deps.storage)?;
     
-    // For now, always return true
-    Ok(true)
+    // Convert canonical address back to human readable format
+    let human_address = deps.api.addr_humanize(address)?;
+    
+    // Create the proper SNIP-721 tokens query
+    let query_msg = TokensQuery {
+        tokens: TokensQueryParams {
+            owner: human_address.to_string(),
+            viewing_key: viewing_key.to_string(),
+            limit: Some(30),
+        },
+    };
+    
+    let query_request = QueryRequest::Wasm(WasmQuery::Smart {
+        contract_addr: deps.api.addr_humanize(&sct_contract_address)?.to_string(),
+        code_hash: sct_code_hash,
+        msg: to_binary(&query_msg)?,
+    });
+    
+    // Execute the query
+    let query_result: Result<TokensResponse, _> = deps.querier.query(&query_request);
+    
+    match query_result {
+        Ok(response) => {
+            // Check if user has any tokens
+            let has_tokens = !response.token_list.tokens.is_empty();
+            if has_tokens {
+                Ok(true)
+            } else {
+                // Return error instead of false to make it explicit
+                Err(StdError::generic_err("No SCT tokens found for this address"))
+            }
+        }
+        Err(e) => {
+            // If query fails (e.g., invalid viewing key), return specific error
+            Err(StdError::generic_err(format!("SCT query failed: {}", e)))
+        }
+    }
 }
 
 

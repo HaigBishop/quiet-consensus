@@ -19,6 +19,7 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [userVote, setUserVote] = useState<number | null>(null);
+  const [votingError, setVotingError] = useState<string | null>(null);
   const { pollStore, refreshPolls, secretJsFunctions } = usePollStore();
 
   // Get the latest poll data from the store, falling back to the initial poll
@@ -32,6 +33,7 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
       setHoveredOption(null);
       setIsVoting(false);
       setUserVote(null);
+      setVotingError(null);
       
       // Then check if user has already voted (async)
       const checkVote = async () => {
@@ -54,6 +56,7 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
       setHoveredOption(null);
       setIsVoting(false);
       setUserVote(null);
+      setVotingError(null);
     }
   }, [isOpen, poll?.pollId]);
 
@@ -64,6 +67,7 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
       setHoveredOption(null);
       setIsVoting(false);
       setUserVote(null);
+      setVotingError(null);
     }
   }, [poll?.pollId]);
 
@@ -97,6 +101,7 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
     if (optionIndex === -1) return;
 
     setIsVoting(true);
+    setVotingError(null);
     
     try {
       // Submit vote to blockchain
@@ -107,13 +112,31 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
       // Refresh polls to get updated tally
       await refreshPolls();
       
-      // Only update local state after successful refresh
-      // The updated poll data will come from the store
-      setUserVote(optionIndex);
-      setShowResults(true);
+      // Verify that the vote was actually recorded by checking user's vote
+      const recordedVote = await secretJsFunctions.getMyVote(poll.pollId);
+      
+      if (recordedVote === optionIndex) {
+        // Vote was successfully recorded, update UI
+        setUserVote(optionIndex);
+        setShowResults(true);
+        console.log(`Vote successfully recorded for option ${optionIndex}`);
+      } else {
+        // Vote was not recorded (likely due to SCT requirement)
+        setVotingError("Voting unsuccessful. A Soulbound Credential Token is required to vote.");
+        console.log(`Vote not recorded. Expected: ${optionIndex}, Actual: ${recordedVote}`);
+      }
     } catch (error) {
       console.error('Failed to cast vote:', error);
-      alert(`Failed to cast vote: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      
+      // Check if it's an SCT-related error
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      if (errorMessage.toLowerCase().includes('sct') || 
+          errorMessage.toLowerCase().includes('soulbound') ||
+          errorMessage.toLowerCase().includes('credential')) {
+        setVotingError("Voting unsuccessful. A Soulbound Credential Token is required to vote.");
+      } else {
+        setVotingError(`Voting unsuccessful: ${errorMessage}`);
+      }
     } finally {
       setIsVoting(false);
     }
@@ -200,7 +223,10 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
                     {hoveredOption === option.optionId && !isVoting && (
                       <button 
                         className="vote-button"
-                        onClick={() => handleVote(option.optionId)}
+                        onClick={() => {
+                          setVotingError(null); // Clear any previous error
+                          handleVote(option.optionId);
+                        }}
                         disabled={isVoting}
                       >
                         Vote
@@ -229,6 +255,13 @@ const ViewPollDialog = ({ poll: initialPoll, isOpen, onClose }: ViewPollDialogPr
                   <path d="M21 12a9 9 0 11-6.219-8.56" />
                 </svg>
                 Submitting vote...
+              </div>
+            )}
+
+            {/* Voting error */}
+            {votingError && (
+              <div className="voting-error">
+                {votingError}
               </div>
             )}
           </div>
