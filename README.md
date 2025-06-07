@@ -2,14 +2,11 @@
 
 Quiet Consensus is a proof-of-concept anonymous polling dApp made possible with the Secret Network. It only allows voting by individuals that hold a Soulbound Credential Token (SCT), ensuring that every vote originates from a single person, and no single person can vote multiple times. Quiet Consensus is accessible via a webpage and by using the Keplr wallet browser extension.
 
-# To Do
-- Write white paper
 
 ### Key Features
 - **Perfectly anonymous polling**: Votes are completely private thanks to Secret Network
 - **Sybil resistance**: Only SCT (Soulbound Credential Token) holders can vote, ensuring one person = one vote
 - **Smooth frontend**: Intuitive React interface with automated permit handling
-
 
 
 ## Repository Structure
@@ -48,7 +45,6 @@ quiet-consensus/
 ### Frontend Component (`web/`)
 - Single page React web application
 - Contains secretjs API with the polling and SCT contracts
-
 
 
 ## How to Deploy
@@ -91,6 +87,15 @@ cd ~/Repos/quiet-consensus/
 chmod +x deploy-all.sh
 ./deploy-all.sh
 ```
+
+## Gallery
+![Image 1](./imgs/image_1.png)
+
+![Image 2](./imgs/image_2.png)
+
+![Image 3](./imgs/image_3.png)
+
+Also see the video demonstration in `./imgs/`.
 
 
 ## Author
