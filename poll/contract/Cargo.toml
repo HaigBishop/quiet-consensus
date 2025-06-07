@@ -37,6 +37,9 @@ cosmwasm-schema = "1.0.0"
 sha2 = "0.10"
 hex = "0.4"
 
+[dev-dependencies]
+cosmwasm-schema = "1.0.0"
+
 [[bin]]
 name = "schema"
 required-features = ["schema"]

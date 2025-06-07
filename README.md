@@ -3,7 +3,6 @@
 Quiet Consensus is a proof-of-concept anonymous polling dApp made possible with the Secret Network. It only allows voting by individuals that hold a Soulbound Credential Token (SCT), ensuring that every vote originates from a single person, and no single person can vote multiple times. Quiet Consensus is accessible via a webpage and by using the Keplr wallet browser extension.
 
 # To Do
-- Make tests
 - Write white paper
 
 ### Key Features

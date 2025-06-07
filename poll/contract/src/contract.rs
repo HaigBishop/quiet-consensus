@@ -154,7 +154,8 @@ pub fn try_cast_vote(
     VOTES.insert(deps.storage, &vote_key, &option_idx)?;
     
     // Update the poll tally
-    let mut poll = POLLS.get(deps.storage, &poll_id).unwrap();
+    let mut poll = POLLS.get(deps.storage, &poll_id)
+        .ok_or_else(|| StdError::generic_err("Poll does not exist"))?;
     poll.tally[option_idx as usize] += 1;
     POLLS.insert(deps.storage, &poll_id, &poll)?;
     
@@ -218,11 +219,13 @@ fn query_get_polls(
     deps: Deps
 ) -> StdResult<Binary> {
     
-    let polls: StdResult<Vec<_>> = POLLS.iter(deps.storage)?
-        .map(|item| item.map(|(_, poll)| poll))
-        .collect();
-    
-    let polls = polls?;
+    // Check if iterator is available, if not return empty vec
+    let polls: Vec<Poll> = match POLLS.iter(deps.storage) {
+        Ok(iter) => iter
+            .filter_map(|item| item.ok().map(|(_, poll)| poll))
+            .collect(),
+        Err(_) => Vec::new(), // Return empty vector if iterator fails
+    };
     
     to_binary(&QueryAnswer::GetPolls { polls })
 }
@@ -423,5 +426,128 @@ fn get_user_vote(
     let vote = VOTES.get(deps.storage, &vote_key);
     
     Ok(vote)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use cosmwasm_std::testing::mock_dependencies;
+    
+    #[test]
+    fn test_generate_poll_id() {
+        let title = "Test Poll";
+        let options = vec!["Option A".to_string(), "Option B".to_string()];
+        let poll_id = generate_poll_id(title, &options);
+        
+        // Poll ID should be deterministic
+        let poll_id2 = generate_poll_id(title, &options);
+        assert_eq!(poll_id, poll_id2);
+        
+        // Poll ID should be different for different inputs
+        let options_different = vec!["Option X".to_string(), "Option Y".to_string()];
+        let poll_id3 = generate_poll_id(title, &options_different);
+        assert_ne!(poll_id, poll_id3);
+        
+        // Poll ID should be a valid hex string (64 characters for SHA256)
+        assert_eq!(poll_id.len(), 64);
+        assert!(poll_id.chars().all(|c| c.is_ascii_hexdigit()));
+    }
+    
+    #[test]
+    fn test_validate_poll_valid() {
+        let deps = mock_dependencies();
+        let result = validate_poll(
+            "Valid Title",
+            "Valid description",
+            &vec!["Option A".to_string(), "Option B".to_string()],
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_ok());
+    }
+    
+    #[test]
+    fn test_validate_poll_invalid_options() {
+        let deps = mock_dependencies();
+        
+        // Too few options
+        let result = validate_poll(
+            "Valid Title",
+            "Valid description",
+            &vec!["Only Option".to_string()],
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Invalid number of options"));
+        
+        // Too many options
+        let too_many_options: Vec<String> = (1..=9).map(|i| format!("Option {}", i)).collect();
+        let result = validate_poll(
+            "Valid Title",
+            "Valid description",
+            &too_many_options,
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Invalid number of options"));
+    }
+    
+    #[test]
+    fn test_validate_poll_empty_fields() {
+        let deps = mock_dependencies();
+        
+        // Empty title
+        let result = validate_poll(
+            "",
+            "Valid description",
+            &vec!["Option A".to_string(), "Option B".to_string()],
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Title and description cannot be empty"));
+        
+        // Empty description
+        let result = validate_poll(
+            "Valid Title",
+            "",
+            &vec!["Option A".to_string(), "Option B".to_string()],
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Title and description cannot be empty"));
+    }
+    
+    #[test]
+    fn test_validate_poll_field_lengths() {
+        let deps = mock_dependencies();
+        
+        // Title too long
+        let long_title = "a".repeat(101);
+        let result = validate_poll(
+            &long_title,
+            "Valid description",
+            &vec!["Option A".to_string(), "Option B".to_string()],
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Title too long"));
+        
+        // Description too long
+        let long_description = "a".repeat(501);
+        let result = validate_poll(
+            "Valid Title",
+            &long_description,
+            &vec!["Option A".to_string(), "Option B".to_string()],
+            "unique_poll_id",
+            deps.as_ref(),
+        );
+        assert!(result.is_err());
+        assert!(result.unwrap_err().to_string().contains("Description too long"));
+    }
 }
 
