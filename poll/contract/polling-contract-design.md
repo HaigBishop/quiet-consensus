@@ -1,6 +1,8 @@
 
 # Polling Contract Design
 
+*Note: Some of the details of this document could be outdated*
+
 ---
 
 ## Storages (for `state.rs`)

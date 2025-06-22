@@ -89,13 +89,17 @@ chmod +x deploy-all.sh
 ```
 
 ## Gallery
-![Image 1](./imgs/image_1.png)
+![Image 1](./docs/imgs/image_1.png)
 
-![Image 2](./imgs/image_2.png)
+![Image 2](./docs/imgs/image_2.png)
 
-![Image 3](./imgs/image_3.png)
+![Image 3](./docs/imgs/image_3.png)
 
-Also see the video demonstration in `./imgs/`.
+Also see the video demonstration in `./docs/imgs/`.
+
+![Image 0](./docs/imgs/image_0.png)
+
+***Figure 1.** Quiet Consensus architecture. **(a)** Soul-bound credential token (SCT) smart contract; **(b)** polling smart contract; **(c)** Quiet Consensus users; **(d)** off-chain issuing organisation (or "admin”) that mints SCTs to users; **(e)** web front-end through which users view, create and vote in polls; **(f)** the Secret Network which Quiet Consensus runs on.*
 
 
 ## Author
